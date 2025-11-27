@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.forest-tree {
+    background-size: contain; 
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    mix-blend-mode: multiply; 
+    transition: all 0.5s ease-in-out; 
+    transform-origin: bottom center;
+    animation: sway 15s ease-in-out infinite alternate; 
+    
+    width: 95%; 
+    height: 70vh; 
+    opacity: 1;
+}
+
+.dark .forest-tree {
+    mix-blend-mode: normal;
+}
+
+.forest-tree-A-1 {
+    width: 95%;
+    height: 70vh;
+    opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+    .forest-tree-A-1 {
+        width: 60%;
+        height: 75vh;
+        left: 60%;
+        opacity: 0.9;
+    }
+    
+    .forest-tree-B-2 {
+        width: 50%;
+        height: 65vh; 
+        left: 30%;
+        opacity: 0.7;
+        z-index: 0;
+    }
+    /* Bagian yang bermasalah di sini telah dihapus */
+}
+
+@media (min-width: 1024px) {
+    .forest-tree-A-1 {
+        width: 750px; 
+        height: 850px;
+        left: 55%;
+        opacity: 0.8;
+    }
+    
+    .forest-tree-B-2 {
+        width: 550px; 
+        height: 700px;
+        left: 30%;
+        opacity: 0.6;
+    }
+    
+    .forest-tree-A-3 {
+        width: 350px; 
+        height: 500px; 
+        right: 10%;
+        opacity: 0.5;
+    }
+
+    .forest-tree-C-small-1 {
+        width: 200px;
+        height: 300px;
+        left: 0%;
+        opacity: 0.3;
+        z-index: -1;
+    }
+    .forest-tree-C-small-2 {
+        width: 180px;
+        height: 280px;
+        left: 70%; 
+        opacity: 0.2;
+        z-index: -1;
+    }
+    .forest-tree-C-small-3 {
+        width: 150px;
+        height: 250px;
+        right: 0%;
+        opacity: 0.25;
+        z-index: -1;
+    }
+     .forest-tree-C-small-4 { 
+        width: 100px;
+        height: 180px;
+        left: 40%;
+        opacity: 0.15;
+        z-index: -2; 
+    }
+}
+
+@keyframes sway {
+    0% {
+        transform: rotateZ(0deg) scale(1);
+    }
+    15% {
+        transform: rotateZ(0.3deg) scale(1.005);
+    }
+    25% {
+        transform: rotateZ(0.5deg) scale(1.01); 
+    }
+    40% {
+        transform: rotateZ(0.8deg) scale(1.03); 
+    }
+    50% {
+        transform: rotateZ(0deg) scale(1);
+    }
+    60% {
+        transform: rotateZ(-0.8deg) scale(1.03); 
+    }
+    75% {
+        transform: rotateZ(-0.5deg) scale(1.01);
+    }
+    85% {
+        transform: rotateZ(-0.3deg) scale(1.005);
+    }
+    100% {
+        transform: rotateZ(0deg) scale(1);
+    }
+}
+
+.leaf {
+    position: absolute;
+    background-color: var(--leaf-color-light, rgba(139, 69, 19, 0.7));
+    border-radius: 50% 10% 50% 10% / 10% 50% 10% 50%;
+    opacity: 0;
+    pointer-events: none;
+    animation: fall linear infinite;
+    width: 15px;
+    height: 10px; 
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+}
+
+.dark .leaf {
+    background-color: var(--leaf-color-dark, rgba(80, 40, 10, 0.7));
+}
+
+@keyframes fall {
+    0% {
+        transform: translate3d(0, -100px, 0) rotateZ(0deg) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate3d(
+            var(--leaf-x-end, 0px), 
+            calc(100vh + 100px), 
+            0
+        ) rotateZ(
+            var(--leaf-rotate-end, 360deg)
+        ) scale(
+            var(--leaf-scale-end, 1)
+        );
+        opacity: 0;
+    }
+}
+
+.bg-game-completed {
+    border: 1px solid theme('colors.green.600'); 
+    box-shadow: 0 0 15px theme('colors.green.500'), 0 0 5px theme('colors.green.500') inset;
+    transition: all 0.5s ease-in-out;
+}
+
+.dark .bg-game-completed {
+    border-color: theme('colors.lime.400');
+    box-shadow: 0 0 15px theme('colors.lime.400'), 0 0 5px theme('colors.lime.400') inset;
+}
+.bird {
+    position: absolute; 
+    color: black; 
+    pointer-events: none;
+    animation-timing-function: linear; 
+    animation-iteration-count: infinite; 
+    transition: opacity 0.5s;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5)); 
+    
+    & svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+}
+
+@keyframes fly-path-1 {
+    0% {
+        transform: translate(-100vw, 80vh) rotate(-10deg) scale(0.8); 
+        opacity: 0;
+    }
+    50% {
+        transform: translate(50vw, 40vh) rotate(-5deg) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(110vw, -20vh) rotate(10deg) scale(0.7); 
+        opacity: 0;
+    }
+}
+@keyframes fly-path-2 {
+    0% {
+        transform: translate(100vw, 80vh) rotate(10deg) scale(0.8) scaleX(-1); 
+        opacity: 0;
+    }
+    50% {
+        transform: translate(50vw, 40vh) rotate(5deg) scale(1.1) scaleX(-1); 
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-10vw, -20vh) rotate(-10deg) scale(0.7) scaleX(-1); 
+        opacity: 0;
+    }
+}
+@keyframes fly-path-3 {
+    0% {
+        transform: translate(-100vw, -20vh) rotate(-10deg) scale(0.8); 
+        opacity: 0;
+    }
+    50% {
+        transform: translate(50vw, 60vh) rotate(-5deg) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(110vw, 80vh) rotate(10deg) scale(0.7); 
+        opacity: 0;
+    }
+}
+@keyframes fly-path-4 {
+    0% {
+        transform: translate(100vw, -20vh) rotate(10deg) scale(0.8) scaleX(-1); 
+        opacity: 0;
+    }
+    50% {
+        transform: translate(50vw, 60vh) rotate(5deg) scale(1.1) scaleX(-1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-10vw, 80vh) rotate(-10deg) scale(0.7) scaleX(-1); 
+        opacity: 0;
+    }
+}

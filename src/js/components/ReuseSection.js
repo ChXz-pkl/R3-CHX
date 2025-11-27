@@ -63,6 +63,9 @@ let totalPoints = 0;
 const soundCorrect = new Audio('./public/music/sound/correct.mp3');
 const soundComplete = new Audio('./public/music/sound/complete.mp3'); 
 
+let touchDraggedItemEl = null; 
+let cloneEl = null; 
+
 function playCorrectSound() {
     try {
         if (soundCorrect) { 
@@ -93,9 +96,9 @@ function createItemElement(item, isDraggable = false) {
     if (isDraggable) {
         itemElement.className = `reuse-item w-16 h-16 p-2 text-center cursor-grab 
                                 bg-transparent transition-all duration-300 
-                                hover:scale-110 flex flex-col justify-center items-center absolute`;
+                                hover:scale-110 flex flex-col justify-center items-center absolute
+                                bottle-drag-source touch-drag-source`; 
         itemElement.setAttribute('draggable', true);
-        itemElement.classList.add('bottle-drag-source');
 
         const randomX = Math.random() * 90; 
         const randomY = Math.random() * 90; 
@@ -171,8 +174,12 @@ function checkCompletion() {
         reuseTargetContainer.removeEventListener('dragover', handleDragOver);
         reuseTargetContainer.removeEventListener('dragleave', handleDragLeave);
         reuseTargetContainer.removeEventListener('drop', handleDrop);
+        
+        reuseBottlesContainer.removeEventListener('touchstart', handleTouchStart);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+        
         setGameCompleted('reuse');
-
         handleGameSuccess();
     }
 }
@@ -212,6 +219,7 @@ function handleGameSuccess() {
         reuseGameWrapper.classList.remove('grid', 'md:grid-cols-2', 'gap-10');
     }
 }
+
 
 function handleDragStart(e) {
     const bottleElement = e.target.closest('.bottle-drag-source');
@@ -258,9 +266,15 @@ function handleDrop(e) {
     }
 
     dropTarget.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.02]');
+    
+    processDrop(draggedId);
+}
+
+
+function processDrop(draggedId) {
+    const targetItem = CABINET_ITEM; 
 
     const draggedItem = BOTTLE_ITEMS.find(item => item.id === draggedId);
-    const targetItem = CABINET_ITEM; 
 
     if (!draggedItem) {
         showDropError(`⚠️ Item yang diseret tidak ditemukan atau sudah dikumpulkan.`);
@@ -293,6 +307,78 @@ function handleDrop(e) {
     }
 }
 
+
+function handleTouchStart(e) {
+    const touch = e.touches[0];
+    touchDraggedItemEl = touch.target.closest('.touch-drag-source');
+
+    if (!touchDraggedItemEl) return;
+
+    e.preventDefault(); 
+    
+    cloneEl = touchDraggedItemEl.cloneNode(true);
+    cloneEl.classList.add('fixed', 'opacity-70', 'pointer-events-none', 'z-50', 'touch-clone');
+    cloneEl.style.width = touchDraggedItemEl.offsetWidth + 'px';
+    cloneEl.style.height = touchDraggedItemEl.offsetHeight + 'px';
+    cloneEl.style.transform = 'translate(-50%, -50%)'; 
+    cloneEl.style.transition = 'none'; 
+
+    cloneEl.style.left = touch.clientX + 'px';
+    cloneEl.style.top = touch.clientY + 'px';
+    document.body.appendChild(cloneEl);
+
+    touchDraggedItemEl.classList.add('opacity-40');
+}
+
+function handleTouchMove(e) {
+    if (!cloneEl) return;
+
+    e.preventDefault(); 
+    
+    const touch = e.touches[0];
+
+    cloneEl.style.left = touch.clientX + 'px';
+    cloneEl.style.top = touch.clientY + 'px';
+
+    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+    const dropTarget = targetElement ? targetElement.closest('.drop-target') : null;
+
+    document.querySelectorAll('.drop-target').forEach(target => {
+        target.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.02]');
+    });
+
+    if (dropTarget) {
+        dropTarget.classList.add('ring-4', 'ring-blue-400', 'scale-[1.02]');
+    }
+}
+
+function handleTouchEnd(e) {
+    if (!cloneEl || !touchDraggedItemEl) return;
+
+    e.preventDefault(); 
+
+    const lastTouch = e.changedTouches[0];
+    const draggedId = touchDraggedItemEl.dataset.id;
+    
+    document.body.removeChild(cloneEl);
+    cloneEl = null; 
+    
+    touchDraggedItemEl.classList.remove('opacity-40');
+    touchDraggedItemEl = null;
+
+    document.querySelectorAll('.drop-target').forEach(target => {
+        target.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.02]');
+    });
+
+    const targetElement = document.elementFromPoint(lastTouch.clientX, lastTouch.clientY);
+    const dropTarget = targetElement ? targetElement.closest('.drop-target') : null;
+    
+    if (dropTarget) {
+        processDrop(draggedId);
+    }
+}
+
+
 export function initializeReuseSection() {
     const bottleContainer = document.getElementById('reuse-bottles-container');
     if (bottleContainer) {
@@ -307,6 +393,10 @@ export function initializeReuseSection() {
     reuseTargetContainer.addEventListener('dragover', handleDragOver);
     reuseTargetContainer.addEventListener('dragleave', handleDragLeave);
     reuseTargetContainer.addEventListener('drop', handleDrop);
+
+    reuseBottlesContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     checkCompletion();
 }

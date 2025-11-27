@@ -1,6 +1,7 @@
 import { setGameCompleted } from "../GameController.js";
 
 const REDUCE_ITEMS = [
+    // ... (REDUCE_ITEMS array tetap sama)
     {
         id: 'plastik-sekali-pakai',
         type: 'wrong',
@@ -85,6 +86,10 @@ const dropErrorContainer = document.getElementById('drop-error-message');
 
 let draggedIdInProgress; 
 
+// Tambahkan variabel baru untuk touch/mobile
+let touchDraggedItemEl = null; 
+let cloneEl = null; 
+
 const soundCorrect = new Audio('./public/music/sound/correct.mp3'); 
 const soundIncorrect = new Audio('./public/music/sound/incorrect.mp3'); 
 const soundComplete = new Audio('./public/music/sound/complete.mp3'); 
@@ -101,13 +106,14 @@ function createItemElement(item, isDraggable = false) {
     const itemElement = document.createElement('div');
 
     if (isDraggable) {
+        // PERHATIAN: Tambahkan kelas 'touch-drag-source'
         itemElement.className = `reduce-item w-full h-[12rem] p-2 text-center cursor-grab 
                                 bg-yellow-100 dark:bg-yellow-900 text-gray-800 dark:text-white 
                                 transition-all duration-300 border-b border-yellow-300 dark:border-yellow-700 
                                 hover:shadow-lg flex flex-col justify-center items-center`;
 
         itemElement.setAttribute('draggable', isDraggable);
-        itemElement.classList.add('correct-drag-source');
+        itemElement.classList.add('correct-drag-source', 'touch-drag-source');
     } else {
         itemElement.className = `reduce-item w-[8.5rem] p-2 rounded-lg text-center 
                                 bg-red-50 dark:bg-red-900 border border-red-300 dark:border-red-700 
@@ -229,6 +235,8 @@ function handleMoveCorrect() {
     reduceSuccessMessage.classList.add('hidden');
 }
 
+// --- Handler Drag Standar (Tetap sama untuk desktop) ---
+
 function handleDragStart(e) {
     const draggedItemEl = e.target.closest('[data-id]');
     
@@ -277,12 +285,19 @@ function handleDrop(e) {
 
     if (!dropTarget) return;
 
-    dropTarget.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.05]');
+    // Panggil logika pencocokan yang sebenarnya
+    processDrop(draggedId, dropTarget);
+}
 
+// --- Logika Inti Drop (Diperkenalkan sebagai fungsi terpisah untuk digunakan di Drag dan Touch) ---
+
+function processDrop(draggedId, dropTarget) {
     const draggedItem = CORRECT_ITEMS.find(item => item.id === draggedId);
     const wrongItem = WRONG_ITEMS.find(item => item.id === dropTarget.dataset.id);
 
     const isMatch = draggedItem && wrongItem && draggedItem.matchId === wrongItem.id;
+
+    dropTarget.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.05]');
 
     if (wrongItem.isReplaced) {
         showDropError(`Item ${wrongItem.name} sudah diganti!`);
@@ -308,6 +323,7 @@ function handleDrop(e) {
 
         dropTarget.replaceWith(correctItemEl);
 
+        // Hapus item yang diseret dari kontainer sumber
         const sourceItemEl = correctContainer.querySelector(`[data-id="${draggedId}"]`);
         if (sourceItemEl) {
             sourceItemEl.remove();
@@ -324,15 +340,106 @@ function handleDrop(e) {
     }
 }
 
+// --- Handler Touch untuk Mobile ---
+
+function handleTouchStart(e) {
+    const touch = e.touches[0];
+    touchDraggedItemEl = touch.target.closest('.touch-drag-source');
+
+    if (!touchDraggedItemEl) return;
+
+    e.preventDefault(); 
+    
+    // Buat kloningan (clone) untuk visual seret
+    cloneEl = touchDraggedItemEl.cloneNode(true);
+    cloneEl.classList.add('fixed', 'opacity-70', 'pointer-events-none', 'z-50');
+    cloneEl.style.width = touchDraggedItemEl.offsetWidth + 'px';
+    cloneEl.style.height = touchDraggedItemEl.offsetHeight + 'px';
+    cloneEl.style.transform = 'translate(-50%, -50%)'; 
+
+    // Atur posisi awal kloningan
+    cloneEl.style.left = touch.clientX + 'px';
+    cloneEl.style.top = touch.clientY + 'px';
+    document.body.appendChild(cloneEl);
+
+    // Tandai item sumber dengan opacity rendah
+    touchDraggedItemEl.classList.add('opacity-40');
+}
+
+function handleTouchMove(e) {
+    if (!cloneEl) return;
+
+    e.preventDefault(); 
+    
+    const touch = e.touches[0];
+
+    // Pindahkan kloningan item
+    cloneEl.style.left = touch.clientX + 'px';
+    cloneEl.style.top = touch.clientY + 'px';
+
+    // Periksa apakah item berada di atas target drop
+    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+    const dropTarget = targetElement ? targetElement.closest('.wrong-drop-target') : null;
+
+    // Hapus visual highlight dari semua target drop yang salah
+    document.querySelectorAll('.wrong-drop-target').forEach(target => {
+        target.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.05]');
+    });
+
+    // Tambahkan visual highlight jika berada di atas target yang valid
+    if (dropTarget && !WRONG_ITEMS.find(item => item.id === dropTarget.dataset.id).isReplaced) {
+        dropTarget.classList.add('ring-4', 'ring-blue-400', 'scale-[1.05]');
+    }
+}
+
+function handleTouchEnd(e) {
+    if (!cloneEl || !touchDraggedItemEl) return;
+
+    e.preventDefault(); 
+
+    const lastTouch = e.changedTouches[0];
+    const draggedId = touchDraggedItemEl.dataset.id;
+    
+    // Hapus kloningan dari DOM
+    document.body.removeChild(cloneEl);
+    cloneEl = null; 
+    
+    // Kembalikan opacity item sumber
+    touchDraggedItemEl.classList.remove('opacity-40');
+    touchDraggedItemEl = null;
+
+    // Hapus semua visual highlight
+    document.querySelectorAll('.wrong-drop-target').forEach(target => {
+        target.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.05]');
+    });
+
+    // Periksa elemen di bawah jari saat diangkat
+    const targetElement = document.elementFromPoint(lastTouch.clientX, lastTouch.clientY);
+    const dropTarget = targetElement ? targetElement.closest('.wrong-drop-target') : null;
+    
+    if (dropTarget) {
+        processDrop(draggedId, dropTarget);
+    }
+}
+
+// --- Inisialisasi Utama ---
+
 export function initializeReduceSection() {
     renderItems();
 
+    // Event listener untuk Drag (Desktop)
     correctContainer.addEventListener('dragstart', handleDragStart);
     correctContainer.addEventListener('dragend', handleDragEnd);
 
     bottomSection.addEventListener('dragover', handleDragOver);
     bottomSection.addEventListener('dragleave', handleDragLeave);
     bottomSection.addEventListener('drop', handleDrop);
+
+    // Event listener untuk Touch (Mobile)
+    correctContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
+
 
     moveCorrectButton.addEventListener('click', handleMoveCorrect);
 }

@@ -2,19 +2,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-.forest-tree-A-1 {
-    background-image: url('.././public/img/tree-silhouette-dark-a.png');
-}
-
-.forest-tree-B-2,
-.forest-tree-A-3,
-.forest-tree-C-small-1,
-.forest-tree-C-small-2,
-.forest-tree-C-small-3,
-.forest-tree-C-small-4 {
-    background-image: url('.././public/img/tree-silhouette-dark-b.png');
-}
-
 .forest-tree {
     background-size: contain; 
     background-position: center bottom;

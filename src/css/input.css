@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 .forest-tree-A-1 {
-    background-image: url('./public/img/tree-silhouette-dark-a.png');
+    background-image: url('.././public/img/tree-silhouette-dark-a.png');
 }
 
 .forest-tree-B-2,
@@ -12,7 +12,7 @@
 .forest-tree-C-small-2,
 .forest-tree-C-small-3,
 .forest-tree-C-small-4 {
-    background-image: url('./public/img/tree-silhouette-dark-b.png');
+    background-image: url('.././public/img/tree-silhouette-dark-b.png');
 }
 
 .forest-tree {
@@ -54,12 +54,7 @@
         opacity: 0.7;
         z-index: 0;
     }
-        width: 150px;
-        height: 200px;
-        left: 70%;
-        opacity: 0.2;
-        z-index: -1;
-    }
+    /* Bagian yang bermasalah di sini telah dihapus */
 }
 
 @media (min-width: 1024px) {
@@ -112,7 +107,8 @@
         opacity: 0.15;
         z-index: -2; 
     }
-/* --- Keyframes untuk Animasi Sway (Dipertahankan versi yang kompleks) --- */
+}
+
 @keyframes sway {
     0% {
         transform: rotateZ(0deg) scale(1);
@@ -194,7 +190,6 @@
     border-color: theme('colors.lime.400');
     box-shadow: 0 0 15px theme('colors.lime.400'), 0 0 5px theme('colors.lime.400') inset;
 }
-/* --- Bird Animation --- */
 .bird {
     position: absolute; 
     color: black; 
@@ -209,7 +204,8 @@
         height: 100%;
         display: block;
     }
-/* 1. JALUR: Kiri Bawah -> Kanan Atas (TIDAK ADA FLIP) */
+}
+
 @keyframes fly-path-1 {
     0% {
         transform: translate(-100vw, 80vh) rotate(-10deg) scale(0.8); 
@@ -223,7 +219,7 @@
         transform: translate(110vw, -20vh) rotate(10deg) scale(0.7); 
         opacity: 0;
     }
-/* 2. JALUR: Kanan Bawah -> Kiri Atas (FLIP HORIZONTAL) */
+}
 @keyframes fly-path-2 {
     0% {
         transform: translate(100vw, 80vh) rotate(10deg) scale(0.8) scaleX(-1); 
@@ -237,7 +233,7 @@
         transform: translate(-10vw, -20vh) rotate(-10deg) scale(0.7) scaleX(-1); 
         opacity: 0;
     }
-/* 3. JALUR: Kiri Atas -> Kanan Bawah */
+}
 @keyframes fly-path-3 {
     0% {
         transform: translate(-100vw, -20vh) rotate(-10deg) scale(0.8); 
@@ -251,7 +247,7 @@
         transform: translate(110vw, 80vh) rotate(10deg) scale(0.7); 
         opacity: 0;
     }
-/* 4. JALUR: Kanan Atas -> Kiri Bawah (FLIP HORIZONTAL) */
+}
 @keyframes fly-path-4 {
     0% {
         transform: translate(100vw, -20vh) rotate(10deg) scale(0.8) scaleX(-1); 

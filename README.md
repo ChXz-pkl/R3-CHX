@@ -1,5 +1,15 @@
 # SYFACX R3
 
+## 👥 Tim Pengembang
+
+| Nama Anggota | Instansi |
+| :--- | :--- |
+| **Chandra Maulana** | SMK Muhammadiyah 2 Kuningan |
+| **Sintiya Dwi Azzhara** | SMK Muhammadiyah 2 Kuningan |
+| **Fachri Ridho Fadilah** | SMK Muhammadiyah 2 Kuningan |
+
+---
+
 ## 🌟 Tentang Proyek
 
 **SYFACX R3** adalah sebuah aplikasi interaktif yang didedikasikan untuk edukasi dan aksi nyata seputar **3R (Reduce, Reuse, Recycle)**.
@@ -13,20 +23,6 @@ Aplikasi ini dikembangkan dengan tujuan sederhana: **mengubah teori menjadi aksi
 Setiap tantangan dan mini game di dalam aplikasi ini dirancang untuk mensimulasikan keputusan sehari-hari yang berdampak positif pada Bumi. Mulai dari mengurangi sampah plastik di dapur hingga mengubah limbah menjadi produk baru.
 
 Misi utama kami adalah menciptakan generasi yang tidak hanya tahu tentang 3R, tetapi benar-benar **mempraktikkannya** dalam kehidupan sehari-hari.
-
-### Dukungan Komunitas
-
-Aplikasi ini adalah hasil kolaborasi dan kerja keras, dan kami selalu terbuka untuk masukan, ide, atau dukungan dari komunitas pegiat lingkungan.
-
----
-
-## 👥 Tim Pengembang
-
-| Nama Anggota | Instansi |
-| :--- | :--- |
-| **Chandra Maulana** | SMK Muhammadiyah 2 Kuningan |
-| **Sintiya Dwi Azzhara** | SMK Muhammadiyah 2 Kuningan |
-| **Fachri Ridho Fadilah** | SMK Muhammadiyah 2 Kuningan |
 
 ---
 

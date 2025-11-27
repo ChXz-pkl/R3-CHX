@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3R: Reduce, Reuse, Recycle</title>
+    <link href="./src/css/main.css" rel="stylesheet">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <style>
+        .forest-tree-A-1 {
+            background-image: url('../public/img/tree-silhouette-dark-a.png');
+        }
+
+        .forest-tree-B-2,
+        .forest-tree-A-3 {
+            background-image: url('../public/img/tree-silhouette-dark-b.png');
+        }
+
+        .forest-tree-C-small-1,
+        .forest-tree-C-small-2,
+        .forest-tree-C-small-3,
+        .forest-tree-C-small-4 {
+            background-image: url('../public/img/tree-silhouette-dark-b.png');
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-500 overflow-x-hidden">
+    <audio id="background-music" loop>
+        <source src="../public/music/bgm_default.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <nav class="sticky top-0 z-50 w-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+
+                <div class="shrink-0 flex items-center">
+                    <svg class="h-8 w-8 text-green-600 mr-2" fill="currentColor" viewBox="0 0 640 640"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M216.3 124C262.5 44 378 44 424.2 124L461.5 188.6L489.2 172.6C497.6 167.7 508.1 168.4 515.8 174.3C523.5 180.2 526.9 190.2 524.4 199.6L500.9 287C497.5 299.8 484.3 307.4 471.5 304L384.1 280.6C374.7 278.1 367.8 270.2 366.5 260.6C365.2 251 369.9 241.5 378.3 236.7L406 220.7L368.7 156.1C347.1 118.8 293.3 118.8 271.7 156.1L266.4 165.2C257.6 180.5 238 185.7 222.7 176.9C207.4 168.1 202.2 148.5 211 133.1L216.3 124zM513.7 343.1C529 334.3 548.6 339.5 557.4 354.8L562.7 363.9C608.9 443.9 551.2 543.9 458.8 543.9L384.2 543.9L384.2 575.9C384.2 585.6 378.4 594.4 369.4 598.1C360.4 601.8 350.1 599.8 343.2 592.9L279.2 528.9C269.8 519.5 269.8 504.3 279.2 495L343.2 431C350.1 424.1 360.4 422.1 369.4 425.8C378.4 429.5 384.2 438.3 384.2 448L384.2 480L458.8 480C501.9 480 528.9 433.3 507.3 396L502 386.9C493.2 371.6 498.4 352 513.7 343.2zM115 299.4L87.3 283.4C78.9 278.5 74.2 269.1 75.5 259.5C76.8 249.9 83.7 242 93.1 239.5L180.5 216C193.3 212.6 206.5 220.2 209.9 233L233.3 320.4C235.8 329.8 232.4 339.7 224.7 345.7C217 351.7 206.5 352.3 198.1 347.4L170.4 331.4L133.1 396C111.5 433.3 138.5 480 181.6 480L192.2 480C209.9 480 224.2 494.3 224.2 512C224.2 529.7 209.9 544 192.2 544L181.6 544C89.3 544 31.6 444 77.8 364L115 299.4z" />
+                    </svg>
+                    <span class="text-2xl font-bold text-green-600">SYFACX 3R</span>
+                </div>
+
+                <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+                    <a href="#hero-section"
+                        class="text-gray-900 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 font-medium transition duration-150">Home</a>
+                    <a href="#reduce-section"
+                        class="text-gray-900 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 font-medium transition duration-150">Artikel</a>
+                    <a href="#about-section"
+                        class="text-gray-900 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 font-medium transition duration-150">About</a>
+                    <a href="#contact-section"
+                        class="text-gray-900 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 font-medium transition duration-150">Contant</a>
+                </div>
+
+                <div class="flex items-center space-x-2">
+
+                    <button id="theme-toggle" aria-label="Toggle Dark Mode"
+                        class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300">
+                        <svg class="sun-icon h-6 w-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                            </path>
+                        </svg>
+                        <svg class="moon-icon h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <button id="mobile-menu-button" type="button"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 transition sm:hidden"
+                        aria-controls="mobile-menu-content" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="hidden sm:hidden border-t border-gray-200 dark:border-gray-700" id="mobile-menu-content">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#hero-section"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-green-600 dark:hover:text-green-400 transition duration-150">Home</a>
+                <a href="#reduce-section"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-green-600 dark:hover:text-green-400 transition duration-150">Artikel</a>
+                <a href="#about-section"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-green-600 dark:hover:text-green-400 transition duration-150">About</a>
+                <a href="#contact-section"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-green-600 dark:hover:text-green-400 transition duration-150">Contant</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="hero-section"
+        class="relative min-h-[80vh] flex items-center transition-colors duration-1000 ease-in-out overflow-hidden">
+
+        <div id="flying-birds-container" class="absolute inset-0 pointer-events-none z-10 hidden overflow-hidden"
+            aria-hidden="true">
+        </div>
+
+        <div class="forest-container absolute bottom-0 left-0 w-full h-full pointer-events-none z-0">
+
+            <div class="forest-tree forest-tree-A-1 absolute bottom-0 left-1/2 -translate-x-1/2" aria-hidden="true">
+            </div>
+
+            <div class="forest-tree forest-tree-B-2 absolute bottom-0 left-[25%] -translate-x-1/2 hidden md:block"
+                aria-hidden="true"></div>
+
+            <div class="forest-tree forest-tree-A-3 absolute bottom-0 right-[20%] translate-x-1/2 hidden lg:block"
+                aria-hidden="true"></div>
+
+            <div class="forest-tree forest-tree-C-small-1 absolute bottom-0 left-[5%] opacity-30 hidden lg:block"
+                aria-hidden="true"></div>
+            <div class="forest-tree forest-tree-C-small-2 absolute bottom-0 left-[70%] opacity-20 hidden md:block"
+                aria-hidden="true"></div>
+            <div class="forest-tree forest-tree-C-small-3 absolute bottom-0 right-[5%] opacity-25 hidden lg:block"
+                aria-hidden="true"></div>
+            <div class="forest-tree forest-tree-C-small-4 absolute bottom-0 left-[40%] opacity-15 hidden lg:block"
+                aria-hidden="true"></div>
+
+        </div>
+
+        <div class="falling-leaves-container absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-2 gap-12 items-center z-20">
+            <div>
+                <h1 id="hero-content-title"
+                    class="text-4xl md:xt-6xl font-extrabold mb-4 leading-tight text-stone-950 ">...</h1>
+                <p id="hero-content-description" class="text-sm md:text-xl font-light opacity-90 text-white">...</p>
+                <div class="mt-8">
+                    <a href="#reduce-section"
+                        class="inline-flex items-center justify-center px-4 lg:px-6 py-2 lg:py-3 border border-transparent text-base font-medium rounded-full text-green-800 bg-white hover:bg-gray-200 transition duration-300 shadow-lg">
+                        Pelajari Lebih Lanjut
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative flex justify-center items-center">
+                <div id="logo-circle"
+                    class="w-full h-auto aspect-square md:w-96 md:h-96 rounded-full border-8 border-white border-opacity-30 relative flex items-center justify-center transition-all duration-700 ease-in-out">
+
+                    <div id="cross-hatch" class="absolute inset-0 transition-opacity duration-500 pointer-events-none">
+                        <div
+                            class="absolute inset-x-0 top-1/2 h-1 bg-white opacity-40 transform -rotate-45 -translate-y-1/2">
+                        </div>
+                        <div
+                            class="absolute inset-x-0 top-1/2 h-1 bg-white opacity-40 transform rotate-45 -translate-y-1/2">
+                        </div>
+                    </div>
+
+                    <svg class="w-24 h-24 text-white opacity-20 transition-all duration-500" fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4 13l-4-4v3H8v2h4v3l4-4z" />
+                    </svg>
+
+                    <div id="logo-reduce" data-id="reduce"
+                        class="logo-item absolute top-4 left-1/2 transform -translate-x-1/2 cursor-pointer transition-all duration-500 ease-in-out hover:scale-110">
+                    </div>
+
+                    <div id="logo-reuse" data-id="reuse"
+                        class="logo-item absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer transition-all duration-500 ease-in-out hover:scale-110">
+                    </div>
+
+                    <div id="logo-recycle" data-id="recycle"
+                        class="logo-item absolute bottom-4 left-1/2 transform -translate-x-1/2 cursor-pointer transition-all duration-500 ease-in-out hover:scale-110">
+                    </div>
+
+                </div>
+
+            </div>
+    </section>
+
+    <section id="reduce-section" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <h2 class="text-2xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-10 text-center">
+                Reduce: Ganti yang Salah dengan yang Benar!
+            </h2>
+
+            <div class="grid lg:grid-cols-3 gap-10">
+
+                <div id="reduce-text-content" class="lg:col-span-1">
+                    <h3 class="text-xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">Pengertian Reduce dan
+                        Dampaknya
+                    </h3>
+
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        <span class="font-bold text-base lg:text-lg text-green-600 dark:text-green-400">Reduce</span>,
+                        atau
+                        mengurangi, adalah pilar pertama dan yang paling penting dalam konsep 3R. Tujuannya adalah
+                        meminimalkan jumlah sampah yang kita hasilkan <b>dari sumbernya</b> dengan menghindari atau
+                        mengurangi pembelian barang-barang yang berpotensi menjadi sampah, terutama yang sekali pakai
+                        (single-use). Memilih produk dengan kemasan minimal, membeli barang yang tahan lama, dan menolak
+                        kantong plastik adalah contoh aksi Reduce.
+                    </p>
+                    <br>
+                    <h4 class="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-3">Mini Game: Praktik
+                        Reduce!</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        Seret barang dari <b>Lemari Kayu (Pilihan Benar)</b> ke kolom <b>Barang Salah (Pilihan yang
+                            Perlu
+                            Diganti)</b> untuk melakukan penggantian. Pastikan Anda mencocokkan barang sekali pakai
+                        dengan
+                        alternatifnya yang lebih ramah lingkungan.
+                    </p>
+
+
+                </div>
+
+                <div class="lg:col-span-2 space-y-10">
+                    <div id="right-side-cabinet" class="p-6 bg-yellow-800 rounded-lg shadow-xl relative min-h-[150px]">
+                        <h4 class="text-xl font-semibold text-white mb-4">Lemari Kayu: Pilihan Reduce (DRAGGABLE)</h4>
+
+                        <div id="correct-items-container" class="grid grid-cols-2 gap-4 justify-items-stretch">
+                        </div>
+                    </div>
+                    <div id="reduce-success-message"
+                        class="hidden mt-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 dark:bg-green-800 dark:text-green-100">
+                        <p class="font-bold text-lg">Luar Biasa!</p>
+                        <p>Semua pilihan Anda sudah benar. Ini adalah langkah nyata menuju pengurangan sampah. Teruslah
+                            semangat mereduksi!</p>
+                    </div>
+                </div>
+
+
+
+                <div id="bottom-section-wrapper" class="lg:col-span-3">
+
+                    <div id="drop-error-message"
+                        class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 dark:bg-red-900 dark:text-red-200"
+                        role="alert">
+                    </div>
+
+                    <div id="bottom-section"
+                        class="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-xl min-h-[250px] transition-colors duration-500">
+                        <h4 id="bottom-section-title" class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                            Barang Salah yang Perlu Diganti (DROP TARGET)</h4>
+
+                        <div id="wrong-items-container" class="flex flex-wrap gap-10 justify-center">
+                        </div>
+                        <div id="bottom-success-area" class="hidden text-center mt-8">
+                            <p class="text-2xl font-bold text-green-600 dark:text-green-400">Semua Item Selesai!</p>
+                            <p class="text-gray-600 dark:text-gray-400 mt-2">Item yang berhasil Anda ganti akan
+                                dipindahkan ke Lemari Kayu (Barang Benar).</p>
+                            <button id="move-correct-button"
+                                class="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Pindahkan
+                                Barang Benar</button>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </section>
+
+    <section id="reuse-section" class="py-16 md:py-24 bg-white dark:bg-gray-900 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <h2 class="text-2xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-10 text-center">
+                Reuse: Kumpulkan dan Beri Kesempatan Kedua!
+            </h2>
+
+            <div class="grid lg:grid-cols-3 gap-10">
+
+                <div id="reuse-text-content" class="lg:col-span-1">
+                    <h3 class="text-xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">Pengertian Reuse dan
+                        Kreativitas
+                    </h3>
+
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        <span class="font-bold text-base lg:text-lg text-teal-600 dark:text-teal-400">Reuse</span>,
+                        atau menggunakan kembali, adalah pilar kedua dari 3R. Tujuannya adalah memperpanjang siklus
+                        hidup suatu barang <b> sebelum </b> menjadi sampah.
+                        Reuse tidak melibatkan pemrosesan ulang yang membutuhkan energi seperti Daur Ulang.
+                        Ini adalah tentang kreativitas: mengubah botol plastik menjadi pot bunga atau wadah pensil
+                        adalah aksi nyata Reuse.
+                    </p>
+
+                    <h4 class="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-3">Mini Game: Praktik
+                        Reuse!</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        Seret dan kumpulkan <b>8 Botol Bekas yang tersebar</b> di area abu-abu dan masukkan ke <b>Lemari
+                            Daur Ulang</b>. Tunjukkan semangat Reuse Anda!
+                    </p>
+
+
+                </div>
+
+                <div id="reuse-game-wrapper" class="lg:col-span-2 grid md:grid-cols-2 gap-10 min-h-[400px]">
+                    <div id="reuse-bottles-container"
+                        class="p-4 border-4 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-800 relative shadow-inner min-h-[300px]">
+                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Botol Bekas (Seret Saya)
+                        </p>
+                    </div>
+
+                    <div id="reuse-target-container" class="relative">
+                    </div>
+                </div>
+
+
+                <div class="lg:col-span-3">
+                    <div id="reuse-drop-error-message"
+                        class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 dark:bg-red-900 dark:text-red-200"
+                        role="alert">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section id="recycle-section" class="py-16 md:py-24 bg-white dark:bg-gray-800 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-10 text-center">Recycle:
+                Menciptakan Nilai</h2>
+            <p class="text-center text-lg text-gray-700 dark:text-gray-200 mb-12">
+                Gabungkan dua material bekas (di atas) di mesin daur ulang (tengah) untuk menciptakan produk baru
+                (bawah).
+            </p>
+
+            <div class="grid lg:grid-cols-3 gap-10">
+
+                <div id="recycle-text-content" class="lg:col-span-1">
+                    <h3 class="text-xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">Pengertian Recycle dan
+                        Proses Kreatifnya</h3>
+
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        <span class="font-bold text-base lg:text-lg text-green-600 dark:text-green-400">Recycle</span>,
+                        atau daur ulang, adalah pilar terakhir dari 3R. Berbeda dengan Reuse, Daur Ulang melibatkan
+                        <b> pemrosesan ulang </b> material bekas menjadi produk baru. Ini adalah proses yang membutuhkan
+                        energi, tetapi sangat vital untuk menghemat sumber daya alam dan mengurangi penumpukan sampah di
+                        TPA.
+                    </p>
+
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        Inti dari Daur Ulang adalah melihat sampah bukan sebagai akhir, melainkan sebagai <b>bahan
+                            mentah</b> baru. Botol plastik bisa menjadi serat kain, dan kertas bekas bisa menjadi kertas
+                        baru
+                        lagi.
+                    </p>
+
+                    <h4 class="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-3">Mini Game: Praktik
+                        Recycle!</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        Anda adalah operator mesin daur ulang! Seret dan gabungkan dua material yang sesuai dari
+                        <b>Material Source</b> ke <b>Mesin Daur Ulang</b> untuk menghasilkan produk baru. Jika gagal,
+                        Anda
+                        akan mendapatkan "Kesalahan"!
+                    </p>
+                </div>
+
+                <div id="recycle-game-wrapper" class="lg:col-span-2">
+
+                    <div id="recycle-materials-container"
+                        class="p-4 border-4 border-dashed border-gray-400 dark:border-gray-500 rounded-lg bg-gray-50 dark:bg-gray-800 shadow-inner flex flex-wrap gap-4 justify-center min-h-[100px] mb-8">
+                        <p class="text-gray-500 dark:text-gray-400">Seret 2 material ke Mesin di bawah.</p>
+                    </div>
+
+                    <div
+                        class="machine-area bg-gray-300 dark:bg-gray-700 p-6 rounded-xl shadow-2xl mb-10 transition-all duration-500">
+
+                        <div
+                            class="text-center mb-6 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+
+                            <p class="text-sm font-bold text-gray-700 dark:text-gray-300">
+                                Kesalahan Kombinasi:
+                                <span id="hit-counter-value"
+                                    class="text-lg text-red-600 dark:text-red-400 font-extrabold">0</span>
+                            </p>
+
+                            <p id="recycle-drop-error-message"
+                                class="hidden text-sm font-semibold text-red-500 dark:text-red-300 mt-2"></p>
+
+                            <div id="hint-message"
+                                class="hidden mt-3 p-2 text-sm text-left bg-yellow-100 dark:bg-yellow-900 text-gray-800 dark:text-gray-200 rounded border border-yellow-300 dark:border-yellow-700">
+                            </div>
+                        </div>
+                        <div class="machine-slots grid grid-cols-2 gap-8 items-center">
+                            <div id="machine-slot-1" data-slot-index="0"
+                                class="machine-slot h-32 p-3 bg-gray-200 dark:bg-gray-600 rounded-lg flex justify-center items-center cursor-pointer transition-all duration-300 border-4 border-dashed border-gray-400 dark:border-gray-500">
+                                <div class="text-center text-gray-400 dark:text-gray-500 p-2">
+                                    <p class="text-lg font-semibold">Slot 1</p>
+                                    <p class="text-sm">Seret Material</p>
+                                </div>
+                            </div>
+
+                            <div id="machine-slot-2" data-slot-index="1"
+                                class="machine-slot h-32 p-3 bg-gray-200 dark:bg-gray-600 rounded-lg flex justify-center items-center cursor-pointer transition-all duration-300 border-4 border-dashed border-gray-400 dark:border-gray-500">
+                                <div class="text-center text-gray-400 dark:text-gray-500 p-2">
+                                    <p class="text-lg font-semibold">Slot 2</p>
+                                    <p class="text-sm">Seret Material</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center text-lg font-bold text-gray-800 dark:text-white mt-4">⚙️ Mesin Daur Ulang
+                            ⚙️</p>
+                    </div>
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 text-center mt-8">Produk yang Dihasilkan:
+            </h3>
+            <div class="output-slots grid grid-cols-3 md:grid-cols-6 gap-4">
+                <div id="output-slot-1" data-filled="false"
+                    class="h-28 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 flex justify-center items-center text-center shadow-lg">
+                    <p class="text-xs text-gray-500">Produk 1</p>
+                </div>
+                <div id="output-slot-2" data-filled="false"
+                    class="h-28 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 flex justify-center items-center text-center shadow-lg">
+                    <p class="text-xs text-gray-500">Produk 2</p>
+                </div>
+                <div id="output-slot-3" data-filled="false"
+                    class="h-28 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 flex justify-center items-center text-center shadow-lg">
+                    <p class="text-xs text-gray-500">Produk 3</p>
+                </div>
+                <div id="output-slot-4" data-filled="false"
+                    class="h-28 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 flex justify-center items-center text-center shadow-lg">
+                    <p class="text-xs text-gray-500">Produk 4</p>
+                </div>
+                <div id="output-slot-5" data-filled="false"
+                    class="h-28 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 flex justify-center items-center text-center shadow-lg">
+                    <p class="text-xs text-gray-500">Produk 5</p>
+                </div>
+                <div id="output-slot-6" data-filled="false"
+                    class="h-28 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 flex justify-center items-center text-center shadow-lg">
+                    <p class="text-xs text-gray-500">Produk 6</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="game-complete-section"
+        class="py-16 md:py-24 bg-gray-50 dark:bg-gray-900 relative min-h-[500px] transition-all duration-500">
+
+        <div id="r3-content" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 hidden">
+            <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-12 text-center">🏆 Artikel
+                Eksklusif: Menyelami Misi 3R</h2>
+
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-10 border-l-4 border-red-500">
+                <h3 class="text-3xl font-bold text-red-600 dark:text-red-400 mb-3">1. Reduce (Mengurangi)</h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-4">Aksi untuk mengurangi penggunaan bahan yang berpotensi
+                    menjadi sampah, seperti membawa tas belanja sendiri dan menggunakan botol isi ulang.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-10 border-l-4 border-blue-500">
+                <h3 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-3">2. Reuse (Menggunakan Kembali)</h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-4">Menggunakan kembali barang-barang yang masih layak
+                    pakai untuk tujuan yang sama atau berbeda tanpa pengolahan pabrik.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-10 border-l-4 border-green-500">
+                <h3 class="text-3xl font-bold text-green-600 dark:text-green-400 mb-3">3. Recycle (Mendaur Ulang)</h3>
+                <p class="text-gray-700 dark:text-gray-300 mb-4">Olah kembali material menjadi produk baru melalui
+                    fasilitas industri. Ini adalah opsi terakhir dalam hirarki 3R.</p>
+            </div>
+
+            <div class="bg-green-100 dark:bg-green-900 p-4 rounded-lg mt-10 text-center">
+                <p class="text-lg font-bold text-green-700 dark:text-green-400">Selamat! Anda telah membuka wawasan
+                    penuh Misi 3R.</p>
+            </div>
+        </div>
+        <div id="lock-overlay"
+            class="absolute inset-0 bg-gray-900/95 flex flex-col justify-center items-center text-white p-10 transition-opacity duration-500 opacity-100 pointer-events-auto">
+
+            <svg class="w-20 h-20 mb-6 text-yellow-400 animate-pulse" fill="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-7 13c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-13H9V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2z" />
+            </svg>
+
+            <h3 class="text-4xl font-extrabold mb-4 text-red-500">⚠️ ARTIKEL TERKUNCI!</h3>
+            <p class="text-xl text-center max-w-lg">
+                Selesaikan <b>semua tantangan</b> (Reduce, Reuse, & Recycle) untuk membuka Artikel Eksklusif ini dan
+                mendapatkan informasi lengkap tentang Misi 3R!
+            </p>
+        </div>
+    </section>
+
+    <section id="about-section" class="py-16 md:py-24 bg-gray-100 dark:bg-gray-800 transition-all duration-500">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-6">🌱 Tentang Misi Kami: Edukasi
+                Aksi Nyata</h2>
+            <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
+                Aplikasi interaktif 3R ini dikembangkan dengan tujuan sederhana: <b> mengubah teori menjadi aksi </b>.
+                Kami
+                percaya bahwa pendidikan lingkungan, terutama 3R (Reduce, Reuse, Recycle), harus dilakukan dengan cara
+                yang menyenangkan dan praktis.
+            </p>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl space-y-4">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Filosofi Kami: Belajar Sambil
+                    Bertindak</h3>
+                <p class="text-gray-600 dark:text-gray-400">
+                    Setiap tantangan dan mini game di sini dirancang untuk mensimulasikan keputusan sehari-hari yang
+                    berdampak pada Bumi. Dari mengurangi sampah plastik di dapur hingga mengubah limbah menjadi produk
+                    baru.
+                </p>
+                <p class="text-gray-600 dark:text-gray-400 font-semibold">
+                    Misi utama kami adalah menciptakan generasi yang tidak hanya tahu tentang 3R, tetapi benar-benar
+                    <b>mempraktikkannya</b> dalam kehidupan sehari-hari.
+                </p>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Dukungan Komunitas</h3>
+            <p class="text-md text-gray-600 dark:text-gray-400">
+                Aplikasi ini adalah hasil kolaborasi dan kerja keras, dan kami selalu terbuka untuk masukan, ide, atau
+                dukungan dari komunitas pegiat lingkungan.
+            </p>
+        </div>
+    </section>
+
+    <section id="contact-section" class="py-16 md:py-24 bg-white dark:bg-gray-900 transition-all duration-500">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-extrabold text-blue-700 dark:text-blue-400 mb-6">🤝 Kontak</h2>
+            <p class="text-lg text-gray-700 dark:text-gray-300 mb-10">
+                Tertarik untuk berkolaborasi, memberikan masukan, atau melaporkan bug? Silakan hubungi kami melalui
+                saluran di bawah ini.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6 max-w-xl mx-auto">
+                <div
+                    class="p-5 bg-blue-50 dark:bg-blue-900 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <svg class="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-2 4v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7"></path>
+                    </svg>
+                    <h4 class="text-xl font-bold text-gray-900 dark:text-white">Email Dukungan</h4>
+                    <a href="mailto:chandrx76@gmail.com"
+                        class="text-md text-blue-700 dark:text-blue-300 hover:underline break-all">chandrx76@gmail.com</a>
+                </div>
+
+                <div
+                    class="p-5 bg-blue-50 dark:bg-blue-900 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+                    <svg class="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-3" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                    <h4 class="text-xl font-bold text-gray-900 dark:text-white">Media Sosial</h4>
+                    <p class="text-md text-gray-700 dark:text-gray-300">ch7676 (Instagram/X)</p>
+                </div>
+            </div>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-10">
+                Kami akan merespons semua pesan dengan prioritas. Terima kasih atas kepedulian Anda terhadap lingkungan!
+            </p>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 dark:bg-gray-950 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm">&copy; 2025 SYFACX 3R (Reduce, Reuse, Recycle). Dibuat dengan Tujuan Edukasi Lingkungan.
+            </p>
+            <p class="text-xs text-gray-400 mt-1">Desain & Logika Coding: SYFACX</p>
+        </div>
+    </footer>
+    <script type="module" src="./src/js/main.js"></script>
+</body>
+
+</html>

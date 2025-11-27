@@ -9,10 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx tailwindcss -i ./src/css/input.css -o ./dist/css/main.css --watch",
-    "build:css": "npx tailwindcss -i ./src/css/input.css -o ./src/css/main.css --minify",
-    "build:js": "npx esbuild ./src/js/main.js --bundle --minify --outfile=./dist/bundle.js",
-    "build:html": "copy index.html .\\dist\\index.html",
-    "build": "npm run build:css && npm run build:js && npm run build:html"
+    "build": "npx tailwindcss -i ./src/css/input.css -o ./src/css/main.css --minify"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.17"

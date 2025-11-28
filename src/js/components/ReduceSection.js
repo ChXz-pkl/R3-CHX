@@ -109,7 +109,7 @@ function createItemElement(item, isDraggable = false) {
     const itemElement = document.createElement('div');
 
     if (isDraggable) {
-        itemElement.className = `reduce-item w-full xs:h-30 md:h-[7rem] lg:h-[12rem] p-2 text-center cursor-grab 
+        itemElement.className = `reduce-item w-full xs:h-30 md:h-[6rem] lg:h-[7rem] p-2 text-center cursor-grab 
                                 bg-yellow-100 dark:bg-yellow-900 text-gray-800 dark:text-white 
                                 transition-all duration-300 border-b border-yellow-300 dark:border-yellow-700 
                                 hover:shadow-lg flex flex-col justify-center items-center`;
@@ -117,7 +117,7 @@ function createItemElement(item, isDraggable = false) {
         itemElement.setAttribute('draggable', isDraggable);
         itemElement.classList.add('correct-drag-source', 'touch-drag-source');
     } else {
-        itemElement.className = `reduce-item w-full xs:h-30 h-[4rem] md:h-[9rem] lg:h-[10rem] p-2 rounded-lg text-center 
+        itemElement.className = `reduce-item w-full xs:h-40 h-[4rem] md:h-[9rem] p-2 rounded-lg text-center 
                                 bg-red-50 dark:bg-red-900 border border-red-300 dark:border-red-700 
                                 transition-all duration-300 wrong-drop-target`;
     }

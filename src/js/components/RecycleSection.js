@@ -211,13 +211,13 @@ function createItemElement(item, isDraggable = false) {
 
     if (isDraggable) {
         itemElement.className = `
-                                recycle-item p-2 xs:w-16 xs:h-16 w-18 h-18 md:w-20 md:h-20 lg:w-22 lg:h-22 text-center cursor-grab 
+                                recycle-item p-2 xs:w-16 xs:h-16 w-18 h-18 md:w-20 md:h-20 text-center cursor-grab 
                                 bg-gray-200 dark:bg-gray-700 rounded-lg 
                                 transition-all duration-300 hover:scale-110 flex flex-col justify-center items-center shadow-lg`;
         itemElement.setAttribute('draggable', true);
         itemElement.classList.add('material-drag-source');
 
-        itemElement.innerHTML = `<img src="${item.imgSrc}" alt="${item.name}" class="recycle-drag-image xs:w-8 xs:h-8 w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 object-contain" />
+        itemElement.innerHTML = `<img src="${item.imgSrc}" alt="${item.name}" class="recycle-drag-image xs:w-8 xs:h-8 w-10 h-10 md:w-12 md:h-12 object-contain" />
                                  <p class="text-xs font-semibold mt-1">${item.name.replace(/-\s*[A|B]$/, '')}</p>`;
     } else if (item.materials) {
         itemElement.className = `product-item w-full h-full p-2 text-center 
@@ -434,7 +434,7 @@ function checkRecycleProcess() {
 
         } else if (isMatch && matchedProduct.isCrafted) {
             playCraftIncorrectSound();
-            showDropError(`Produk ${matchedProduct.name} sudah dibuat! <b> Klik </b> salah satu material di slot mesin untuk mengeluarkannya dan coba kombinasi lain.`);
+            showDropError(`Produk ${matchedProduct.name} sudah dibuat! Klik salah satu material di slot mesin untuk mengeluarkannya dan coba kombinasi lain.`);
             totalHitCounter++;
             hintTriggerCounter++;
             updateHitCounter();
@@ -478,7 +478,7 @@ function handleGameSuccess() {
         successMessage.innerHTML = `
             <h3 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-2">🎉 Selamat! Tantangan Recycle Selesai!</h3>
             <p class="text-gray-700 dark:text-gray-300">
-                Anda telah berhasil membuat ${TARGET_PRODUCTS_COUNT} produk daur ulang dengan total <b>${totalHitCounter}</b> kesalahan.
+                Anda telah berhasil membuat ${TARGET_PRODUCTS_COUNT} produk daur ulang dengan total ${totalHitCounter} kesalahan.
             </p>
         `;
         recycleMaterialsContainer.className = `p-4 border-4 border-dashed border-green-700 dark:border-green-400 rounded-lg bg-green-50 dark:bg-green-950 shadow-inner flex flex-wrap gap-4 justify-center min-h-[100px] transition-all duration-500`;

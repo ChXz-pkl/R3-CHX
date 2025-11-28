@@ -1,5 +1,5 @@
 import { setGameCompleted } from "../GameController.js";
-
+import { applyHeroBackgroundSafely, markSectionAsComplete } from "./HeroSection.js"; 
 const ALL_RECYCLE_PRODUCTS = [
     {
         id: 'new-book',
@@ -73,7 +73,7 @@ const ALL_RECYCLE_PRODUCTS = [
     },
     {
         id: 'new-bottle',
-        name: 'Botol Kaca',
+        name: 'gelas Kaca',
         imgSrc: './public/img/recycle/product/glass_bottle_new.svg',
         materials: ['kaca-botol', 'kaleng-aluminium'],
         isCrafted: false,
@@ -115,7 +115,6 @@ const TARGET_PRODUCTS_COUNT = 6;
 let ACTIVE_RECYCLE_PRODUCTS = [];
 let ACTIVE_RECYCLE_MATERIALS = [];
 
-// Variabel global untuk Touch Handling (BARU)
 let draggedElement = null;
 let currentDraggedId = null;
 
@@ -209,18 +208,17 @@ function setupRecycleGame() {
 function createItemElement(item, isDraggable = false) {
     const itemElement = document.createElement('div');
     itemElement.dataset.id = item.id;
-    
+
     if (isDraggable) {
-        // Class untuk item yang bisa di-drag. PERUBAHAN: Mengubah w-20 h-20 menjadi w-16 h-16 agar lebih ringkas di mobile.
-        itemElement.className = `recycle-item w-16 h-16 p-2 text-center cursor-grab 
+        itemElement.className = `
+                                recycle-item p-2 xs:w-16 xs:h-16 w-18 h-18 md:w-20 md:h-20 lg:w-22 lg:h-22 text-center cursor-grab 
                                 bg-gray-200 dark:bg-gray-700 rounded-lg 
                                 transition-all duration-300 hover:scale-110 flex flex-col justify-center items-center shadow-lg`;
         itemElement.setAttribute('draggable', true);
         itemElement.classList.add('material-drag-source');
-        
-        // PERUBAHAN: Mengubah w-16 h-16 menjadi w-12 h-12 untuk gambar di dalam item.
-        itemElement.innerHTML = `<img src="${item.imgSrc}" alt="${item.name}" class="recycle-drag-image w-12 h-12 object-contain" />
-                                 <p class="text-xs font-semibold mt-1">${item.name.replace(/-\s*[A|B]$/, '')}</p>`; 
+
+        itemElement.innerHTML = `<img src="${item.imgSrc}" alt="${item.name}" class="recycle-drag-image xs:w-8 xs:h-8 w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 object-contain" />
+                                 <p class="text-xs font-semibold mt-1">${item.name.replace(/-\s*[A|B]$/, '')}</p>`;
     } else if (item.materials) {
         itemElement.className = `product-item w-full h-full p-2 text-center 
                                 bg-green-500 dark:bg-green-700 rounded-lg 
@@ -231,7 +229,6 @@ function createItemElement(item, isDraggable = false) {
         `;
     }
     else {
-        // Class untuk item di slot mesin (bisa diklik untuk dikeluarkan)
         itemElement.className = `slot-item w-full h-full p-2 text-center cursor-pointer
                                 bg-yellow-400 dark:bg-yellow-600 rounded-lg 
                                 flex flex-col justify-center items-center shadow-lg`;
@@ -335,7 +332,6 @@ function updateHitCounter() {
     let hintText = '';
     let showHint = false;
 
-    // LOGIKA PETUNJUK: Per 2 kali kesalahan
     if (hintTriggerCounter >= 2) {
         showHint = true;
 
@@ -345,7 +341,7 @@ function updateHitCounter() {
                 `(${BASE_MATERIALS.find(m => m.id === p.materials[0]).name} + *** = ${p.name})`
             ).join(', ');
         }
-        else if (hintTriggerCounter >= 4) { // Petunjuk kedua (setelah 4 kali kesalahan)
+        else if (hintTriggerCounter >= 4) { 
             productsToShow = nonCraftedProducts.slice(0, 2);
 
             if (productsToShow.length > 0) {
@@ -438,7 +434,7 @@ function checkRecycleProcess() {
 
         } else if (isMatch && matchedProduct.isCrafted) {
             playCraftIncorrectSound();
-            showDropError(`Produk ${matchedProduct.name} sudah dibuat! **Klik** salah satu material di slot mesin untuk mengeluarkannya dan coba kombinasi lain.`);
+            showDropError(`Produk ${matchedProduct.name} sudah dibuat! <b> Klik </b> salah satu material di slot mesin untuk mengeluarkannya dan coba kombinasi lain.`);
             totalHitCounter++;
             hintTriggerCounter++;
             updateHitCounter();
@@ -467,15 +463,8 @@ function checkCompletion() {
 }
 
 function handleGameSuccess() {
-    const oldBgClasses = [
-        'bg-green-300', 'dark:bg-green-600', 'bg-gradient-to-br', 'from-lime-400', 'to-green-600',
-        'bg-teal-300', 'dark:bg-teal-600', 'from-cyan-300', 'to-teal-500',
-    ];
-    if (heroSection) {
-        heroSection.classList.remove(...oldBgClasses);
-        heroSection.classList.add('bg-green-800', 'dark:bg-gray-800', 'bg-gradient-to-r', 'from-green-800', 'to-green-900');
-    }
-
+    applyHeroBackgroundSafely(['bg-green-800', 'dark:bg-gray-800', 'bg-gradient-to-r', 'from-green-800', 'to-green-900']);
+    markSectionAsComplete('recycle');
 
     if (recycleMaterialsContainer) {
         if (recycleMaterialsContainer.classList.contains('hidden')) {
@@ -489,7 +478,7 @@ function handleGameSuccess() {
         successMessage.innerHTML = `
             <h3 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-2">🎉 Selamat! Tantangan Recycle Selesai!</h3>
             <p class="text-gray-700 dark:text-gray-300">
-                Anda telah berhasil membuat ${TARGET_PRODUCTS_COUNT} produk daur ulang dengan total **${totalHitCounter}** kesalahan.
+                Anda telah berhasil membuat ${TARGET_PRODUCTS_COUNT} produk daur ulang dengan total <b>${totalHitCounter}</b> kesalahan.
             </p>
         `;
         recycleMaterialsContainer.className = `p-4 border-4 border-dashed border-green-700 dark:border-green-400 rounded-lg bg-green-50 dark:bg-green-950 shadow-inner flex flex-wrap gap-4 justify-center min-h-[100px] transition-all duration-500`;
@@ -512,7 +501,6 @@ function handleGameSuccess() {
     if (hitContainer) hitContainer.classList.add('hidden');
 }
 
-// FUNGSI DRAG AND DROP (untuk Desktop)
 function handleDragStart(e) {
     const bottleElement = e.target.closest('.material-drag-source');
     if (!bottleElement) return;
@@ -585,15 +573,11 @@ function handleDrop(e) {
     checkRecycleProcess();
 }
 
-// FUNGSI TOUCH (untuk Mobile/Tablet) - BARU
-
-// Fungsi utilitas untuk menemukan elemen di bawah sentuhan
 function getElementFromTouch(touch) {
     return document.elementFromPoint(touch.clientX, touch.clientY);
 }
 
 function handleTouchStart(e) {
-    // Jangan izinkan scrolling saat sentuhan di area material
     e.preventDefault();
 
     const bottleElement = e.target.closest('.material-drag-source');
@@ -606,27 +590,20 @@ function handleTouchStart(e) {
         return;
     }
 
-    // Setel elemen yang sedang di-drag
     draggedElement = bottleElement;
     currentDraggedId = materialId;
 
-    // Terapkan visual 'dragstart'
     draggedElement.classList.add('opacity-40', 'touch-dragging');
-    // Untuk visual mobile, kita bisa membuat salinan yang mengikuti jari
-    // (Implementasi visual drag mobile yang kompleks seperti ini bisa diabaikan/diimplementasikan di CSS atau fungsi lain yang lebih sederhana. Untuk kode ini, kita hanya fokus pada logika drop.)
 }
 
 function handleTouchMove(e) {
     if (!draggedElement) return;
 
     const touch = e.touches[0];
-    // Jangan izinkan scrolling browser
     e.preventDefault();
 
-    // Logika dragover: Mencari elemen di bawah jari
     const targetElement = getElementFromTouch(touch);
 
-    // Hapus highlight dari slot sebelumnya
     document.querySelectorAll('.machine-slot.ring-4').forEach(slot => {
         slot.classList.remove('ring-4', 'ring-yellow-400', 'scale-[1.02]');
     });
@@ -644,10 +621,8 @@ function handleTouchMove(e) {
 function handleTouchEnd(e) {
     if (!draggedElement) return;
 
-    // Sembunyikan elemen yang di-drag
     draggedElement.classList.remove('opacity-40', 'touch-dragging');
 
-    // Hapus highlight dari slot
     document.querySelectorAll('.machine-slot.ring-4').forEach(slot => {
         slot.classList.remove('ring-4', 'ring-yellow-400', 'scale-[1.02]');
     });
@@ -657,7 +632,6 @@ function handleTouchEnd(e) {
     const dropTarget = targetElement ? targetElement.closest('.machine-slot') : null;
 
     if (dropTarget) {
-        // Tiru fungsi handleDrop
         const slotIndex = parseInt(dropTarget.dataset.slotIndex);
         const draggedId = currentDraggedId;
         const draggedItem = ACTIVE_RECYCLE_MATERIALS.find(item => item.id === draggedId);
@@ -668,24 +642,20 @@ function handleTouchEnd(e) {
         else if (machineSlots[slotIndex]) {
             showDropError(`Slot ${slotIndex + 1} sudah terisi. Klik material di slot untuk mengeluarkannya.`);
         } else {
-            // Drop berhasil
             machineSlots[slotIndex] = draggedItem;
             updateMachineSlotsDOM();
             checkRecycleProcess();
         }
     }
 
-    // Reset status drag
     draggedElement = null;
     currentDraggedId = null;
 }
-// END FUNGSI TOUCH
 
 export function initializeRecycleSection() {
     setupRecycleGame();
     renderItems();
 
-    // Event Drag and Drop untuk Desktop
     if (recycleMaterialsContainer) {
         recycleMaterialsContainer.addEventListener('dragstart', handleDragStart);
         recycleMaterialsContainer.addEventListener('dragend', handleDragEnd);
@@ -699,28 +669,20 @@ export function initializeRecycleSection() {
         }
     });
 
-    // PENAMBAHAN: Event Touch untuk Mobile
     if (recycleMaterialsContainer) {
         recycleMaterialsContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
         recycleMaterialsContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
         recycleMaterialsContainer.addEventListener('touchend', handleTouchEnd);
     }
 
-    // Slot mesin juga harus merespons sentuhan (touchmove dan touchend) yang terjadi di luar container
-    // Kita akan pasang listener move dan end di window/document untuk tangkapan yang lebih baik.
     document.addEventListener('touchmove', handleTouchMove, { passive: false });
     document.addEventListener('touchend', handleTouchEnd);
 
 
-    // Event Click untuk Mengeluarkan Material dari Slot Mesin (Desktop & Mobile)
     [recycleMachineSlot1, recycleMachineSlot2].forEach((slotEl, index) => {
         if (slotEl) {
             slotEl.addEventListener('click', (e) => {
                 if (machineSlots[index] && e.target.closest('.machine-slot') === slotEl) {
-                    const item = machineSlots[index];
-
-                    // Karena material di slot belum ditandai isUsed di ACTIVE_RECYCLE_MATERIALS,
-                    // kita hanya perlu mengosongkan slot dan merender ulang.
 
                     machineSlots[index] = null;
 

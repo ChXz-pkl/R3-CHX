@@ -1,7 +1,7 @@
 import { setGameCompleted } from "../GameController.js";
+import { applyHeroBackgroundSafely, markSectionAsComplete } from "./HeroSection.js"; 
 
 const REDUCE_ITEMS = [
-    // ... (REDUCE_ITEMS array tetap sama)
     {
         id: 'plastik-sekali-pakai',
         type: 'wrong',
@@ -26,7 +26,7 @@ const REDUCE_ITEMS = [
         name: 'Botol Plastik',
         matchId: 'botol-tahan-lama',
         imgSrc: './public/img/reduce/wrong_bottle.svg',
-        placeholder: 'Ganti dengan Botol Tahan Lama',
+        placeholder: 'Ganti dengan Botol Kaca/Stainless',
         isReplaced: false
     },
     {
@@ -44,7 +44,7 @@ const REDUCE_ITEMS = [
         name: 'Tas Belanja',
         imgSrc: './public/img/reduce/correct_bag.svg',
         matchId: 'plastik-sekali-pakai',
-        isUsed: false 
+        isUsed: false
     },
     {
         id: 'masker-kain',
@@ -57,7 +57,7 @@ const REDUCE_ITEMS = [
     {
         id: 'botol-tahan-lama',
         type: 'correct',
-        name: 'Botol Tahan Lama (Kaca/Stainless)',
+        name: 'Botol Kaca/Stainless',
         imgSrc: './public/img/reduce/correct_durable_bottle.svg',
         matchId: 'botol-plastik-sekali-pakai',
         isUsed: false
@@ -84,15 +84,18 @@ const reduceSuccessMessage = document.getElementById('reduce-success-message');
 const heroSection = document.getElementById('hero-section');
 const dropErrorContainer = document.getElementById('drop-error-message');
 
-let draggedIdInProgress; 
+let draggedIdInProgress;
 
-// Tambahkan variabel baru untuk touch/mobile
-let touchDraggedItemEl = null; 
-let cloneEl = null; 
+let initialTouchX = 0; 
+let initialTouchY = 0; 
+let touchOffsetX = 0; 
+let touchOffsetY = 0;
+let touchDraggedItemEl = null;
+let cloneEl = null;
 
-const soundCorrect = new Audio('./public/music/sound/correct.mp3'); 
-const soundIncorrect = new Audio('./public/music/sound/incorrect.mp3'); 
-const soundComplete = new Audio('./public/music/sound/complete.mp3'); 
+const soundCorrect = new Audio('./public/music/sound/correct.mp3');
+const soundIncorrect = new Audio('./public/music/sound/incorrect.mp3');
+const soundComplete = new Audio('./public/music/sound/complete.mp3');
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -106,8 +109,7 @@ function createItemElement(item, isDraggable = false) {
     const itemElement = document.createElement('div');
 
     if (isDraggable) {
-        // PERHATIAN: Tambahkan kelas 'touch-drag-source'
-        itemElement.className = `reduce-item w-full h-[12rem] p-2 text-center cursor-grab 
+        itemElement.className = `reduce-item w-full xs:h-30 md:h-[7rem] lg:h-[12rem] p-2 text-center cursor-grab 
                                 bg-yellow-100 dark:bg-yellow-900 text-gray-800 dark:text-white 
                                 transition-all duration-300 border-b border-yellow-300 dark:border-yellow-700 
                                 hover:shadow-lg flex flex-col justify-center items-center`;
@@ -115,12 +117,12 @@ function createItemElement(item, isDraggable = false) {
         itemElement.setAttribute('draggable', isDraggable);
         itemElement.classList.add('correct-drag-source', 'touch-drag-source');
     } else {
-        itemElement.className = `reduce-item w-[8.5rem] p-2 rounded-lg text-center 
+        itemElement.className = `reduce-item w-full xs:h-30 h-[4rem] md:h-[9rem] lg:h-[10rem] p-2 rounded-lg text-center 
                                 bg-red-50 dark:bg-red-900 border border-red-300 dark:border-red-700 
                                 transition-all duration-300 wrong-drop-target`;
     }
 
-    let content = `<img src="${item.imgSrc}" alt="${item.name}" class="reduce-drag-image w-20 h-20 mx-auto mb-2" />`;
+    let content = `<img src="${item.imgSrc}" alt="${item.name}" class="reduce-drag-image xs:w-14 xs:h-14 md:w-20 md:h-20 mx-auto mb-2" />`;
 
     if (item.type === 'wrong') {
         content += `<p class="text-sm font-semibold text-gray-900 dark:text-white">${item.name}</p>`;
@@ -142,7 +144,7 @@ function renderItems() {
     const shuffledCorrectItems = shuffleArray(CORRECT_ITEMS.filter(item => !item.isUsed));
 
     correctContainer.innerHTML = '';
-    shuffledCorrectItems.forEach(item => { 
+    shuffledCorrectItems.forEach(item => {
         const itemEl = createItemElement(item, true);
         correctContainer.appendChild(itemEl);
     });
@@ -167,7 +169,7 @@ function showDropError(message) {
 function checkCompletion() {
     const allReplaced = WRONG_ITEMS.every(item => item.isReplaced);
     if (allReplaced) {
-        soundComplete.play(); 
+        soundComplete.play();
 
         bottomSection.style.minHeight = '150px';
         bottomSuccessArea.classList.remove('hidden');
@@ -175,18 +177,9 @@ function checkCompletion() {
         wrongContainer.classList.add('hidden');
         setGameCompleted('reduce');
 
-        const oldBgClasses = [
-            'bg-green-800', 'dark:bg-green-800', 'bg-red-700', 'bg-blue-600', 'bg-pink-500',
-            'bg-green-700', 'bg-teal-600', 'bg-amber-600',
-            'bg-gradient-to-br', 'from-green-800', 'to-gray-800',
-            'bg-gradient-to-r', 'from-red-700', 'to-red-800',
-            'from-blue-600', 'to-blue-700', 'from-pink-500', 'to-pink-600',
-            'from-green-700', 'to-green-800', 'from-teal-600', 'to-cyan-700',
-            'from-amber-600', 'to-orange-700'
-        ];
+        applyHeroBackgroundSafely(['bg-green-300', 'dark:bg-green-600', 'bg-gradient-to-br', 'from-green-300', 'to-green-500']);
 
-        heroSection.classList.remove(...oldBgClasses);
-        heroSection.classList.add('bg-green-300', 'dark:bg-green-600', 'bg-gradient-to-br', 'from-green-300', 'to-green-500');
+        markSectionAsComplete('reduce');
 
         reduceSuccessMessage.classList.remove('hidden');
     }
@@ -206,8 +199,8 @@ function handleMoveCorrect() {
                 'border-b', 'border-yellow-300', 'dark:border-yellow-700',
                 'flex', 'flex-col', 'justify-center', 'items-center');
 
-            let content = `<img src="${matchItem.imgSrc}" alt="${matchItem.name}" class="w-20 h-20 mx-auto mb-2" />`;
-            content += `<p class="text-base font-semibold">${matchItem.name}</p>`; 
+            let content = `<img src="${matchItem.imgSrc}" alt="${matchItem.name}" class="xs:w-14 xs:14 md:w-20 md:h-20 mx-auto mb-2" />`;
+            content += `<p class="text-base font-semibold">${matchItem.name}</p>`;
             itemEl.innerHTML = content;
 
             newCorrectItems.push(itemEl);
@@ -235,13 +228,11 @@ function handleMoveCorrect() {
     reduceSuccessMessage.classList.add('hidden');
 }
 
-// --- Handler Drag Standar (Tetap sama untuk desktop) ---
-
 function handleDragStart(e) {
     const draggedItemEl = e.target.closest('[data-id]');
-    
+
     if (!draggedItemEl || draggedItemEl.classList.contains('replaced')) {
-        e.preventDefault(); 
+        e.preventDefault();
         return;
     }
 
@@ -252,11 +243,11 @@ function handleDragStart(e) {
         e.preventDefault();
         return;
     }
-    
+
     e.dataTransfer.setData('text/plain', draggedId);
 
     draggedItemEl.classList.add('dragging');
-    draggedIdInProgress = draggedId; 
+    draggedIdInProgress = draggedId;
 }
 
 function handleDragEnd(e) {
@@ -285,11 +276,8 @@ function handleDrop(e) {
 
     if (!dropTarget) return;
 
-    // Panggil logika pencocokan yang sebenarnya
     processDrop(draggedId, dropTarget);
 }
-
-// --- Logika Inti Drop (Diperkenalkan sebagai fungsi terpisah untuk digunakan di Drag dan Touch) ---
 
 function processDrop(draggedId, dropTarget) {
     const draggedItem = CORRECT_ITEMS.find(item => item.id === draggedId);
@@ -306,24 +294,23 @@ function processDrop(draggedId, dropTarget) {
 
     if (isMatch) {
 
-        soundCorrect.play(); 
-        
+        soundCorrect.play();
+
         wrongItem.isReplaced = true;
         draggedItem.isUsed = true;
 
         const correctItemEl = document.createElement('div');
-        correctItemEl.className = `reduce-item w-[8.5rem] p-2 rounded-lg text-center transition-all duration-300 wrong-drop-target`;
+        correctItemEl.className = `reduce-item w-full p-2 rounded-lg text-center transition-all duration-300 wrong-drop-target`;
 
         correctItemEl.classList.add('bg-green-50', 'dark:bg-green-800', 'border', 'border-green-300', 'dark:border-green-700');
 
-        let content = `<img src="${draggedItem.imgSrc}" alt="${draggedItem.name}" class="w-20 h-20 mx-auto mb-2" />`;
+        let content = `<img src="${draggedItem.imgSrc}" alt="${draggedItem.name}" class="xs:w-14 xs:14 md:w-20 md:h-20 mx-auto mb-2" />`;
         content += `<p class="text-sm font-semibold text-gray-900 dark:text-white">${draggedItem.name}</p>`;
         content += `<p class="text-xs text-green-700 dark:text-green-400 mt-1">✔ Sudah Diganti</p>`;
         correctItemEl.innerHTML = content;
 
         dropTarget.replaceWith(correctItemEl);
 
-        // Hapus item yang diseret dari kontainer sumber
         const sourceItemEl = correctContainer.querySelector(`[data-id="${draggedId}"]`);
         if (sourceItemEl) {
             sourceItemEl.remove();
@@ -331,8 +318,8 @@ function processDrop(draggedId, dropTarget) {
 
         checkCompletion();
     } else {
-        soundIncorrect.play(); 
-        
+        soundIncorrect.play();
+
         const targetName = wrongItem ? wrongItem.name : 'Target tidak valid';
         const draggedName = draggedItem ? draggedItem.name : 'Item ini';
 
@@ -340,94 +327,95 @@ function processDrop(draggedId, dropTarget) {
     }
 }
 
-// --- Handler Touch untuk Mobile ---
-
 function handleTouchStart(e) {
     const touch = e.touches[0];
     touchDraggedItemEl = touch.target.closest('.touch-drag-source');
 
     if (!touchDraggedItemEl) return;
 
-    e.preventDefault(); 
+    e.preventDefault();
+
+    const rect = touchDraggedItemEl.getBoundingClientRect();
+    touchOffsetX = touch.clientX - rect.left;
+    touchOffsetY = touch.clientY - rect.top;
+
+    initialTouchX = touch.clientX;
+    initialTouchY = touch.clientY;
     
-    // Buat kloningan (clone) untuk visual seret
     cloneEl = touchDraggedItemEl.cloneNode(true);
-    cloneEl.classList.add('fixed', 'opacity-70', 'pointer-events-none', 'z-50');
+    cloneEl.classList.remove('hover:shadow-lg'); 
+    cloneEl.classList.add('fixed', 'opacity-70', 'pointer-events-none', 'z-50', 'shadow-2xl', 'scale-105');
+    
     cloneEl.style.width = touchDraggedItemEl.offsetWidth + 'px';
     cloneEl.style.height = touchDraggedItemEl.offsetHeight + 'px';
-    cloneEl.style.transform = 'translate(-50%, -50%)'; 
+    cloneEl.style.transform = 'none'; 
 
-    // Atur posisi awal kloningan
-    cloneEl.style.left = touch.clientX + 'px';
-    cloneEl.style.top = touch.clientY + 'px';
+    cloneEl.style.left = (touch.clientX - touchOffsetX) + 'px'; 
+    cloneEl.style.top = (touch.clientY - touchOffsetY) + 'px';
     document.body.appendChild(cloneEl);
 
-    // Tandai item sumber dengan opacity rendah
     touchDraggedItemEl.classList.add('opacity-40');
+    touchDraggedItemEl.style.pointerEvents = 'none'; 
 }
 
 function handleTouchMove(e) {
     if (!cloneEl) return;
 
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
     const touch = e.touches[0];
 
-    // Pindahkan kloningan item
-    cloneEl.style.left = touch.clientX + 'px';
-    cloneEl.style.top = touch.clientY + 'px';
+    cloneEl.style.left = (touch.clientX - touchOffsetX) + 'px';
+    cloneEl.style.top = (touch.clientY - touchOffsetY) + 'px';
 
-    // Periksa apakah item berada di atas target drop
     const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
     const dropTarget = targetElement ? targetElement.closest('.wrong-drop-target') : null;
 
-    // Hapus visual highlight dari semua target drop yang salah
     document.querySelectorAll('.wrong-drop-target').forEach(target => {
         target.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.05]');
     });
 
-    // Tambahkan visual highlight jika berada di atas target yang valid
-    if (dropTarget && !WRONG_ITEMS.find(item => item.id === dropTarget.dataset.id).isReplaced) {
-        dropTarget.classList.add('ring-4', 'ring-blue-400', 'scale-[1.05]');
+    if (dropTarget) {
+        const wrongItem = WRONG_ITEMS.find(item => item.id === dropTarget.dataset.id);
+        if (wrongItem && !wrongItem.isReplaced) {
+            dropTarget.classList.add('ring-4', 'ring-blue-400', 'scale-[1.05]');
+        }
     }
 }
 
 function handleTouchEnd(e) {
     if (!cloneEl || !touchDraggedItemEl) return;
 
-    e.preventDefault(); 
+    e.preventDefault();
 
     const lastTouch = e.changedTouches[0];
     const draggedId = touchDraggedItemEl.dataset.id;
-    
-    // Hapus kloningan dari DOM
+
     document.body.removeChild(cloneEl);
-    cloneEl = null; 
-    
-    // Kembalikan opacity item sumber
+    cloneEl = null;
+
     touchDraggedItemEl.classList.remove('opacity-40');
+    touchDraggedItemEl.style.pointerEvents = 'auto'; 
     touchDraggedItemEl = null;
 
-    // Hapus semua visual highlight
+    touchOffsetX = 0; 
+    touchOffsetY = 0; 
+
     document.querySelectorAll('.wrong-drop-target').forEach(target => {
         target.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.05]');
     });
 
-    // Periksa elemen di bawah jari saat diangkat
     const targetElement = document.elementFromPoint(lastTouch.clientX, lastTouch.clientY);
     const dropTarget = targetElement ? targetElement.closest('.wrong-drop-target') : null;
-    
+
     if (dropTarget) {
         processDrop(draggedId, dropTarget);
     }
 }
 
-// --- Inisialisasi Utama ---
-
 export function initializeReduceSection() {
     renderItems();
 
-    // Event listener untuk Drag (Desktop)
     correctContainer.addEventListener('dragstart', handleDragStart);
     correctContainer.addEventListener('dragend', handleDragEnd);
 
@@ -435,7 +423,6 @@ export function initializeReduceSection() {
     bottomSection.addEventListener('dragleave', handleDragLeave);
     bottomSection.addEventListener('drop', handleDrop);
 
-    // Event listener untuk Touch (Mobile)
     correctContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
     document.addEventListener('touchmove', handleTouchMove, { passive: false });
     document.addEventListener('touchend', handleTouchEnd, { passive: false });

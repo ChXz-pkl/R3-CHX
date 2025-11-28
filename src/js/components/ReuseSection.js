@@ -1,30 +1,30 @@
 import { setGameCompleted } from "../GameController.js";
-
+import { applyHeroBackgroundSafely, markSectionAsComplete } from "./HeroSection.js"; 
 const BOTTLE_TYPES_CONFIG = [
-    { 
-        type: 'A', 
-        pointValue: 3, 
-        count: 4, 
-        imgSrc: './public/img/reuse/bottle_A.svg', 
-        nameSuffix: 'Soda Besar' 
-    }, 
-    { 
-        type: 'B', 
-        pointValue: 2, 
-        count: 2, 
-        imgSrc: './public/img/reuse/bottle_B.svg', 
-        nameSuffix: 'Air Mineral' 
-    }, 
-    { 
-        type: 'C', 
-        pointValue: 1, 
-        count: 2, 
-        imgSrc: './public/img/reuse/bottle_C.svg', 
-        nameSuffix: 'Jus Kecil' 
-    }  
+    {
+        type: 'A',
+        pointValue: 3,
+        count: 4,
+        imgSrc: './public/img/reuse/bottle_A.svg',
+        nameSuffix: 'Soda Besar'
+    },
+    {
+        type: 'B',
+        pointValue: 2,
+        count: 2,
+        imgSrc: './public/img/reuse/bottle_B.svg',
+        nameSuffix: 'Air Mineral'
+    },
+    {
+        type: 'C',
+        pointValue: 1,
+        count: 2,
+        imgSrc: './public/img/reuse/bottle_C.svg',
+        nameSuffix: 'Jus Kecil'
+    }
 ];
 
-const REUSE_BOTTLE_COUNT = 8; 
+const REUSE_BOTTLE_COUNT = 8;
 
 let generatedBottles = [];
 let bottleIndex = 1;
@@ -33,8 +33,8 @@ BOTTLE_TYPES_CONFIG.forEach(config => {
     for (let i = 0; i < config.count; i++) {
         generatedBottles.push({
             id: `botol-bekas-${bottleIndex}`,
-            type: config.type, 
-            pointValue: config.pointValue, 
+            type: config.type,
+            pointValue: config.pointValue,
             name: `Botol ${config.nameSuffix} #${bottleIndex}`,
             matchId: 'reuse-target',
             imgSrc: config.imgSrc,
@@ -47,30 +47,30 @@ BOTTLE_TYPES_CONFIG.forEach(config => {
 const REUSE_ITEMS = [
     {
         id: 'reuse-target',
-        type: 'correct', 
+        type: 'correct',
         name: 'Lemari Daur Ulang',
         imgSrc: './public/img/reuse/correct_cabinet.svg',
-        matchId: 'botol-bekas', 
+        matchId: 'botol-bekas',
     },
     ...generatedBottles
 ];
 
 const CABINET_ITEM = REUSE_ITEMS.find(item => item.id === 'reuse-target');
 let BOTTLE_ITEMS = REUSE_ITEMS.filter(item => item.id !== 'reuse-target');
-let collectedCount = 0; 
-let totalPoints = 0;    
+let collectedCount = 0;
+let totalPoints = 0;
 
 const soundCorrect = new Audio('./public/music/sound/correct.mp3');
-const soundComplete = new Audio('./public/music/sound/complete.mp3'); 
+const soundComplete = new Audio('./public/music/sound/complete.mp3');
 
-let touchDraggedItemEl = null; 
-let cloneEl = null; 
+let touchDraggedItemEl = null;
+let cloneEl = null;
 
 function playCorrectSound() {
     try {
-        if (soundCorrect) { 
-            soundCorrect.pause(); 
-            soundCorrect.currentTime = 0; 
+        if (soundCorrect) {
+            soundCorrect.pause();
+            soundCorrect.currentTime = 0;
             soundCorrect.play();
         }
     } catch (e) {
@@ -80,15 +80,15 @@ function playCorrectSound() {
 
 const reuseBottlesContainer = document.getElementById('reuse-bottles-container');
 const reuseTargetContainer = document.getElementById('reuse-target-container');
-const reuseSection = document.getElementById('reuse-section'); 
+const reuseSection = document.getElementById('reuse-section');
 const dropErrorContainer = document.getElementById('reuse-drop-error-message');
-const heroSection = document.getElementById('hero-section'); 
+const heroSection = document.getElementById('hero-section');
 
 function createItemElement(item, isDraggable = false) {
     const itemElement = document.createElement('div');
     itemElement.dataset.id = item.id;
     itemElement.dataset.matchId = item.matchId || '';
-    
+
     if (item.pointValue) {
         itemElement.dataset.pointValue = item.pointValue;
     }
@@ -97,11 +97,11 @@ function createItemElement(item, isDraggable = false) {
         itemElement.className = `reuse-item w-16 h-16 p-2 text-center cursor-grab 
                                 bg-transparent transition-all duration-300 
                                 hover:scale-110 flex flex-col justify-center items-center absolute
-                                bottle-drag-source touch-drag-source`; 
+                                bottle-drag-source touch-drag-source`;
         itemElement.setAttribute('draggable', true);
 
-        const randomX = Math.random() * 90; 
-        const randomY = Math.random() * 90; 
+        const randomX = Math.random() * 90;
+        const randomY = Math.random() * 90;
         itemElement.style.top = `${randomY}%`;
         itemElement.style.left = `${randomX}%`;
 
@@ -129,12 +129,12 @@ function renderItems() {
 
     reuseBottlesContainer.innerHTML = '';
     unshuffledBottles.forEach(item => {
-        const itemEl = createItemElement(item, true); 
+        const itemEl = createItemElement(item, true);
         reuseBottlesContainer.appendChild(itemEl);
     });
 
     reuseTargetContainer.innerHTML = '';
-    const cabinetEl = createItemElement(CABINET_ITEM, false); 
+    const cabinetEl = createItemElement(CABINET_ITEM, false);
     reuseTargetContainer.appendChild(cabinetEl);
 }
 
@@ -152,8 +152,8 @@ function checkCompletion() {
     const allCollected = collectedCount === REUSE_BOTTLE_COUNT;
 
     const countEl = document.getElementById('collected-count');
-    const pointsEl = document.getElementById('total-points-display'); 
-    
+    const pointsEl = document.getElementById('total-points-display');
+
     if (countEl) {
         countEl.textContent = `${collectedCount} / ${REUSE_BOTTLE_COUNT} Botol Terkumpul`;
     }
@@ -164,47 +164,40 @@ function checkCompletion() {
 
     if (allCollected) {
         try {
-            soundComplete.play(); 
-        } catch(e) {
+            soundComplete.play();
+        } catch (e) {
             console.warn("Gagal memutar suara selesai game.", e);
         }
 
         reuseBottlesContainer.removeEventListener('dragstart', handleDragStart);
-        reuseBottlesContainer.removeEventListener('dragend', handleDragEnd); 
+        reuseBottlesContainer.removeEventListener('dragend', handleDragEnd);
         reuseTargetContainer.removeEventListener('dragover', handleDragOver);
         reuseTargetContainer.removeEventListener('dragleave', handleDragLeave);
         reuseTargetContainer.removeEventListener('drop', handleDrop);
-        
+
         reuseBottlesContainer.removeEventListener('touchstart', handleTouchStart);
         document.removeEventListener('touchmove', handleTouchMove);
         document.removeEventListener('touchend', handleTouchEnd);
-        
+
         setGameCompleted('reuse');
         handleGameSuccess();
     }
 }
 
 function handleGameSuccess() {
-    const oldBgClasses = [
-        'bg-green-300', 'dark:bg-green-600', 'from-green-300', 'to-green-500',
-        'bg-lime-700', 'bg-gradient-to-r', 'from-lime-700', 'to-lime-800', 
-        'bg-teal-600', 'from-teal-600', 'to-teal-700', 
-        'bg-green-800', 'from-green-800', 'to-green-900',
-        'bg-teal-300', 'dark:bg-teal-600', 'from-cyan-300', 'to-teal-500' 
-    ];
+    applyHeroBackgroundSafely(['bg-teal-300', 'dark:bg-teal-600', 'bg-gradient-to-br', 'from-cyan-300', 'to-teal-500']);
 
-    heroSection.classList.remove(...oldBgClasses);
-    heroSection.classList.add('bg-teal-300', 'dark:bg-teal-600', 'bg-gradient-to-br', 'from-cyan-300', 'to-teal-500');
+    markSectionAsComplete('reuse');
 
-    reuseBottlesContainer.classList.add('hidden'); 
-    reuseTargetContainer.classList.add('hidden'); 
+    reuseBottlesContainer.classList.add('hidden');
+    reuseTargetContainer.classList.add('hidden');
 
     const newContent = `
         <div class="text-center p-8 bg-teal-50 dark:bg-teal-900 rounded-lg">
             <h3 class="text-3xl font-bold text-teal-600 dark:text-teal-400 mb-4">🥳 Selamat! Botol Berhasil Dikumpulkan!</h3>
             <p class="text-3xl font-extrabold text-yellow-500 dark:text-yellow-300 mb-4">TOTAL POIN: ${totalPoints}</p>
             <p class="text-gray-700 dark:text-gray-300 mb-4">
-                Anda telah berhasil mengumpulkan dan 'menyelamatkan' semua botol bekas. Ini adalah inti dari **Reuse**: 
+                Anda telah berhasil mengumpulkan dan 'menyelamatkan' semua botol bekas. Ini adalah inti dari <b> Reuse </b> 
                 Memberi kesempatan kedua pada barang yang sudah ada agar tidak menjadi sampah.
             </p>
             <p class="font-semibold text-lg text-gray-800 dark:text-gray-200">
@@ -213,7 +206,7 @@ function handleGameSuccess() {
         </div>
     `;
 
-    const reuseGameWrapper = document.getElementById('reuse-game-wrapper'); 
+    const reuseGameWrapper = document.getElementById('reuse-game-wrapper');
     if (reuseGameWrapper) {
         reuseGameWrapper.innerHTML = newContent;
         reuseGameWrapper.classList.remove('grid', 'md:grid-cols-2', 'gap-10');
@@ -266,13 +259,13 @@ function handleDrop(e) {
     }
 
     dropTarget.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.02]');
-    
+
     processDrop(draggedId);
 }
 
 
 function processDrop(draggedId) {
-    const targetItem = CABINET_ITEM; 
+    const targetItem = CABINET_ITEM;
 
     const draggedItem = BOTTLE_ITEMS.find(item => item.id === draggedId);
 
@@ -289,12 +282,12 @@ function processDrop(draggedId) {
     const isMatch = draggedItem.matchId === targetItem.id;
 
     if (isMatch) {
-        const pointEarned = draggedItem.pointValue; 
-        playCorrectSound(); 
+        const pointEarned = draggedItem.pointValue;
+        playCorrectSound();
 
         draggedItem.isCollected = true;
         collectedCount++;
-        totalPoints += pointEarned; 
+        totalPoints += pointEarned;
 
         const sourceItemEl = reuseBottlesContainer.querySelector(`[data-id="${draggedId}"]`);
         if (sourceItemEl) {
@@ -314,14 +307,14 @@ function handleTouchStart(e) {
 
     if (!touchDraggedItemEl) return;
 
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
     cloneEl = touchDraggedItemEl.cloneNode(true);
     cloneEl.classList.add('fixed', 'opacity-70', 'pointer-events-none', 'z-50', 'touch-clone');
     cloneEl.style.width = touchDraggedItemEl.offsetWidth + 'px';
     cloneEl.style.height = touchDraggedItemEl.offsetHeight + 'px';
-    cloneEl.style.transform = 'translate(-50%, -50%)'; 
-    cloneEl.style.transition = 'none'; 
+    cloneEl.style.transform = 'translate(-50%, -50%)';
+    cloneEl.style.transition = 'none';
 
     cloneEl.style.left = touch.clientX + 'px';
     cloneEl.style.top = touch.clientY + 'px';
@@ -333,8 +326,8 @@ function handleTouchStart(e) {
 function handleTouchMove(e) {
     if (!cloneEl) return;
 
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
     const touch = e.touches[0];
 
     cloneEl.style.left = touch.clientX + 'px';
@@ -355,14 +348,14 @@ function handleTouchMove(e) {
 function handleTouchEnd(e) {
     if (!cloneEl || !touchDraggedItemEl) return;
 
-    e.preventDefault(); 
+    e.preventDefault();
 
     const lastTouch = e.changedTouches[0];
     const draggedId = touchDraggedItemEl.dataset.id;
-    
+
     document.body.removeChild(cloneEl);
-    cloneEl = null; 
-    
+    cloneEl = null;
+
     touchDraggedItemEl.classList.remove('opacity-40');
     touchDraggedItemEl = null;
 
@@ -372,7 +365,7 @@ function handleTouchEnd(e) {
 
     const targetElement = document.elementFromPoint(lastTouch.clientX, lastTouch.clientY);
     const dropTarget = targetElement ? targetElement.closest('.drop-target') : null;
-    
+
     if (dropTarget) {
         processDrop(draggedId);
     }

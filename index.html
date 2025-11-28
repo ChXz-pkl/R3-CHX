@@ -32,6 +32,26 @@
 </head>
 
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-500 overflow-x-hidden">
+
+    <div id="small-screen-warning" class="fixed inset-0 z-[1000] bg-gray-900 flex flex-col items-center justify-center text-center p-8 text-white xs:hidden">
+
+        <svg class="w-16 h-16 mb-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+        </svg>
+
+        <h2 class="text-3xl font-bold mb-3">Mohon Perhatikan Ukuran Layar</h2>
+
+        <p class="text-lg mb-6 max-w-md">
+            Konten interaktif (Mini Game) di halaman ini membutuhkan lebar layar minimum (HandPhone)
+            agar berfungsi dengan baik dan maksimal.
+        </p>
+
+        <p class="text-sm opacity-80 border-t border-gray-700 pt-4 mt-4 max-w-sm">
+            Silakan putar perangkat Anda atau gunakan perangkat dengan lebar layar lebih dari 320px.
+        </p>
+    </div>
     <audio id="background-music" loop>
         <source src="../public/music/bgm_default.mp3" type="audio/mpeg">
         Browser Anda tidak mendukung elemen audio.
@@ -113,8 +133,7 @@
         </div>
     </nav>
 
-    <section id="hero-section"
-        class="relative min-h-[80vh] flex items-center transition-colors duration-1000 ease-in-out overflow-hidden">
+    <section id="hero-section" class="relative min-h-[80vh] flex items-center transition-colors duration-1000 ease-in-out overflow-hidden">
 
         <div id="flying-birds-container" class="absolute inset-0 pointer-events-none z-10 hidden overflow-hidden"
             aria-hidden="true">
@@ -133,7 +152,7 @@
 
             <div class="forest-tree forest-tree-C-small-1 absolute bottom-0 left-[5%] opacity-30 hidden lg:block"
                 aria-hidden="true"></div>
-            <div class="forest-tree forest-tree-C-small-2 absolute bottom-0 left-[70%] opacity-20 hidden md:block"
+            <div class="forest-tree forest-tree-C-small-2 absolute bottom-0 left-[70%] opacity-20 hidden lg:block"
                 aria-hidden="true"></div>
             <div class="forest-tree forest-tree-C-small-3 absolute bottom-0 right-[5%] opacity-25 hidden lg:block"
                 aria-hidden="true"></div>
@@ -145,8 +164,8 @@
         <div class="falling-leaves-container absolute inset-0 pointer-events-none" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid md:grid-cols-2 gap-12 items-center z-20">
             <div>
-                <h1 id="hero-content-title"
-                    class="text-4xl md:xt-6xl font-extrabold mb-4 leading-tight text-stone-950 ">...</h1>
+                <h1 id="hero-content-title" class="text-4xl md:xt-6xl font-extrabold mb-4 leading-tight text-white ">...
+                </h1>
                 <p id="hero-content-description" class="text-sm md:text-xl font-light opacity-90 text-white">...</p>
                 <div class="mt-8">
                     <a href="#reduce-section"
@@ -199,7 +218,7 @@
                 Reduce: Ganti yang Salah dengan yang Benar!
             </h2>
 
-            <div class="grid lg:grid-cols-3 gap-10">
+            <div class="grid lg:grid-cols-2 gap-10">
 
                 <div id="reduce-text-content" class="lg:col-span-1">
                     <h3 class="text-xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">Pengertian Reduce dan
@@ -258,21 +277,24 @@
                         <h4 id="bottom-section-title" class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                             Barang Salah yang Perlu Diganti (DROP TARGET)</h4>
 
-                        <div id="wrong-items-container" class="flex flex-wrap gap-10 justify-center">
+                        <div id="wrong-items-container"
+                            class="grid grid-cols-2 gap-4">
                         </div>
                         <div id="bottom-success-area" class="hidden text-center mt-8">
-                            <p class="text-2xl font-bold text-green-600 dark:text-green-400">Semua Item Selesai!</p>
-                            <p class="text-gray-600 dark:text-gray-400 mt-2">Item yang berhasil Anda ganti akan
-                                dipindahkan ke Lemari Kayu (Barang Benar).</p>
-                            <button id="move-correct-button"
-                                class="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Pindahkan
-                                Barang Benar</button>
-                        </div>
+                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">Semua Item Selesai!</p>
+                        <p class="text-gray-600 dark:text-gray-400 mt-2">Item yang berhasil Anda ganti akan
+                            dipindahkan ke Lemari Kayu (Barang Benar).</p>
+                        <button id="move-correct-button"
+                            class="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Pindahkan
+                            Barang Benar</button>
                     </div>
-
-
+                    </div>
+                    
                 </div>
+
+
             </div>
+        </div>
 
         </div>
         </div>
@@ -335,7 +357,7 @@
         </div>
     </section>
 
-    <section id="recycle-section" class="py-16 md:py-24 bg-white dark:bg-gray-800 transition-all duration-500">
+    <section id="recycle-section" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800 transition-all duration-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-10 text-center">Recycle:
                 Menciptakan Nilai</h2>
@@ -346,7 +368,7 @@
 
             <div class="grid lg:grid-cols-2 gap-10">
 
-                <div id="recycle-text-content" class="lg:col-span-2">
+                <div id="recycle-text-content" class="lg:col-span-1">
                     <h3 class="text-xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">Pengertian Recycle dan
                         Proses Kreatifnya</h3>
 
@@ -364,7 +386,8 @@
                         baru
                         lagi.
                     </p>
-
+                </div>
+                <div id="recycle-text-content" class="lg:col-span-2">
                     <h4 class="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-3">Mini Game: Praktik
                         Recycle!</h4>
                     <p class="text-gray-600 dark:text-gray-400 mb-6">
@@ -375,7 +398,8 @@
                     </p>
                 </div>
 
-                <div id="recycle-game-wrapper" class="lg:col-span-2">
+
+                <div id="recycle-game-wrapper" class="lg:col-span-3">
 
                     <div id="recycle-materials-container"
                         class="p-4 border-4 border-dashed border-gray-400 dark:border-gray-500 rounded-lg bg-gray-50 dark:bg-gray-800 shadow-inner flex flex-wrap gap-4 justify-center min-h-[100px] mb-8">
@@ -425,7 +449,7 @@
             </div>
             <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4 text-center mt-8">Produk yang Dihasilkan:
             </h3>
-            <div class="output-slots-container grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="output-slots-container grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div id="output-slot-1" data-filled="false"
                     class="h-28 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 flex justify-center items-center text-center shadow-lg">
                     <p class="text-xs text-gray-500">Produk 1</p>
@@ -455,11 +479,11 @@
     </section>
 
     <section id="game-complete-section"
-        class="py-16 md:py-24 bg-gray-50 dark:bg-gray-900 relative min-h-[500px] transition-all duration-500">
+        class="py-16 md:py-24 bg-white dark:bg-gray-900 relative min-h-[500px] transition-all duration-500">
 
         <div id="r3-content" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 hidden">
-            <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-12 text-center">🏆 Artikel
-                Eksklusif: Menyelami Misi 3R</h2>
+            <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-12 text-center">Artikel Eksklusif:
+                Menyelami Misi 3R</h2>
 
             <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-10 border-l-4 border-red-500">
                 <h3 class="text-3xl font-bold text-red-600 dark:text-red-400 mb-3">1. Reduce (Mengurangi)</h3>
@@ -499,10 +523,10 @@
         </div>
     </section>
 
-    <section id="about-section" class="py-16 md:py-24 bg-gray-100 dark:bg-gray-800 transition-all duration-500">
+    <section id="about-section" class="py-16 md:py-24 bg-gray-50 dark:bg-gray-800 transition-all duration-500">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-6">🌱 Tentang Misi Kami: Edukasi
-                Aksi Nyata</h2>
+            <h2 class="text-4xl font-extrabold text-green-700 dark:text-green-400 mb-6"> Tentang Misi Kami: Edukasi Aksi
+                Nyata</h2>
             <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
                 Aplikasi interaktif 3R ini dikembangkan dengan tujuan sederhana: <b> mengubah teori menjadi aksi </b>.
                 Kami
@@ -522,17 +546,12 @@
                     <b>mempraktikkannya</b> dalam kehidupan sehari-hari.
                 </p>
             </div>
-            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Dukungan Komunitas</h3>
-            <p class="text-md text-gray-600 dark:text-gray-400">
-                Aplikasi ini adalah hasil kolaborasi dan kerja keras, dan kami selalu terbuka untuk masukan, ide, atau
-                dukungan dari komunitas pegiat lingkungan.
-            </p>
         </div>
     </section>
 
     <section id="contact-section" class="py-16 md:py-24 bg-white dark:bg-gray-900 transition-all duration-500">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-extrabold text-blue-700 dark:text-blue-400 mb-6">🤝 Kontak</h2>
+            <h2 class="text-4xl font-extrabold text-blue-700 dark:text-blue-400 mb-6">Kontak</h2>
             <p class="text-lg text-gray-700 dark:text-gray-300 mb-10">
                 Tertarik untuk berkolaborasi, memberikan masukan, atau melaporkan bug? Silakan hubungi kami melalui
                 saluran di bawah ini.
@@ -556,7 +575,7 @@
                     <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Media Sosial</h4>
 
                     <div class="flex justify-center space-x-4">
-                        <a href="https://www.instagram.com/ch7676" target="_blank" rel="noopener noreferrer"
+                        <a href="https://www.instagram.com/chx7676" target="_blank" rel="noopener noreferrer"
                             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300 group flex flex-col items-center">
                             <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -565,7 +584,7 @@
                             <span class="text-sm font-semibold group-hover:underline">Instagram |</span>
                         </a>
 
-                        <a href="https://x.com/ch7676" target="_blank" rel="noopener noreferrer"
+                        <a href="https://x.com/chx7676" target="_blank" rel="noopener noreferrer"
                             class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-300 group flex flex-col items-center">
                             <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -574,6 +593,7 @@
                             <span class="text-sm font-semibold group-hover:underline">| X/Twitter</span>
                         </a>
                     </div>
+                    
                 </div>
             </div>
 

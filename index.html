@@ -33,7 +33,8 @@
 
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-500 overflow-x-hidden">
 
-    <div id="small-screen-warning" class="fixed inset-0 z-[1000] bg-gray-900 flex flex-col items-center justify-center text-center p-8 text-white xs:hidden">
+    <div id="small-screen-warning"
+        class="fixed inset-0 z-[1000] bg-gray-900 flex flex-col items-center justify-center text-center p-8 text-white xs:hidden">
 
         <svg class="w-16 h-16 mb-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
@@ -133,7 +134,8 @@
         </div>
     </nav>
 
-    <section id="hero-section" class="relative min-h-[80vh] flex items-center transition-colors duration-1000 ease-in-out overflow-hidden">
+    <section id="hero-section"
+        class="relative min-h-[80vh] flex items-center transition-colors duration-1000 ease-in-out overflow-hidden">
 
         <div id="flying-birds-container" class="absolute inset-0 pointer-events-none z-10 hidden overflow-hidden"
             aria-hidden="true">
@@ -235,6 +237,8 @@
                         kantong plastik adalah contoh aksi Reduce.
                     </p>
                     <br>
+                </div>
+                <div id="reduce-text-content" class="lg:col-span-1">
                     <h4 class="text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-3">Mini Game: Praktik
                         Reduce!</h4>
                     <p class="text-gray-600 dark:text-gray-400 mb-6">
@@ -248,25 +252,28 @@
 
                 </div>
 
-                <div class="lg:col-span-2 space-y-10">
-                    <div id="right-side-cabinet" class="p-6 bg-yellow-800 rounded-lg shadow-xl relative min-h-[150px]">
-                        <h4 class="text-xl font-semibold text-white mb-4">Lemari Kayu: Pilihan Reduce (DRAGGABLE)</h4>
 
-                        <div id="correct-items-container" class="grid grid-cols-2 gap-4 justify-items-stretch">
-                        </div>
-                    </div>
-                    <div id="reduce-success-message"
-                        class="hidden mt-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 dark:bg-green-800 dark:text-green-100">
-                        <p class="font-bold text-lg">Luar Biasa!</p>
-                        <p>Semua pilihan Anda sudah benar. Ini adalah langkah nyata menuju pengurangan sampah. Teruslah
-                            semangat mereduksi!</p>
-                    </div>
-                </div>
 
 
 
                 <div id="bottom-section-wrapper" class="lg:col-span-3">
+                    <div class="space-y-10">
+                        <div id="right-side-cabinet"
+                            class="p-6 bg-yellow-800 rounded-lg shadow-xl relative min-h-[150px]">
+                            <h4 class="text-xl font-semibold text-white mb-4">Lemari Kayu: Pilihan Reduce (DRAGGABLE)
+                            </h4>
 
+                            <div id="correct-items-container" class="grid grid-cols-2 gap-4 justify-items-stretch">
+                            </div>
+                        </div>
+                        <div id="reduce-success-message"
+                            class="hidden mt-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 dark:bg-green-800 dark:text-green-100">
+                            <p class="font-bold text-lg">Luar Biasa!</p>
+                            <p>Semua pilihan Anda sudah benar. Ini adalah langkah nyata menuju pengurangan sampah.
+                                Teruslah
+                                semangat mereduksi!</p>
+                        </div>
+                    </div>
                     <div id="drop-error-message"
                         class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 dark:bg-red-900 dark:text-red-200"
                         role="alert">
@@ -277,19 +284,18 @@
                         <h4 id="bottom-section-title" class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                             Barang Salah yang Perlu Diganti (DROP TARGET)</h4>
 
-                        <div id="wrong-items-container"
-                            class="grid grid-cols-2 gap-4">
+                        <div id="wrong-items-container" class="grid grid-cols-2 gap-4">
                         </div>
                         <div id="bottom-success-area" class="hidden text-center mt-8">
-                        <p class="text-2xl font-bold text-green-600 dark:text-green-400">Semua Item Selesai!</p>
-                        <p class="text-gray-600 dark:text-gray-400 mt-2">Item yang berhasil Anda ganti akan
-                            dipindahkan ke Lemari Kayu (Barang Benar).</p>
-                        <button id="move-correct-button"
-                            class="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Pindahkan
-                            Barang Benar</button>
+                            <p class="text-2xl font-bold text-green-600 dark:text-green-400">Semua Item Selesai!</p>
+                            <p class="text-gray-600 dark:text-gray-400 mt-2">Item yang berhasil Anda ganti akan
+                                dipindahkan ke Lemari Kayu (Barang Benar).</p>
+                            <button id="move-correct-button"
+                                class="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Pindahkan
+                                Barang Benar</button>
+                        </div>
                     </div>
-                    </div>
-                    
+
                 </div>
 
 
@@ -593,7 +599,7 @@
                             <span class="text-sm font-semibold group-hover:underline">| X/Twitter</span>
                         </a>
                     </div>
-                    
+
                 </div>
             </div>
 
